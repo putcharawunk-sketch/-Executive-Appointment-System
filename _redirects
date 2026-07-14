@@ -1,0 +1,9 @@
+# Netlify Redirect Rules for Executive Appointment Manager
+# Maps clean URLs elegantly to static HTML components
+
+/index        /index.html   200
+/admin        /admin.html   200
+/status       /status.html  200
+
+# Fallback for client routes or error routing
+/*            /index.html   200

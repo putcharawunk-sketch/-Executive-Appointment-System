@@ -1,0 +1,51 @@
+{
+  "entities": {
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Executive Appointment Booking Record",
+      "type": "object",
+      "properties": {
+        "refCode": { "type": "string", "description": "Unique lookup reference code APT-YYYYMMDD-XXXX" },
+        "clientName": { "type": "string", "description": "Full name of the visitor" },
+        "clientCompany": { "type": "string", "description": "Company name of the visitor" },
+        "clientEmail": { "type": "string", "description": "Primary email of the visitor" },
+        "clientPhone": { "type": "string", "description": "Optional phone number or contact channel" },
+        "executiveHost": { "type": "string", "description": "Target executive name" },
+        "purpose": { "type": "string", "description": "Meeting agenda and objectives" },
+        "timeOption": { "type": "string", "description": "Selected scheduling preference mode (A: fixed hours, B: custom slots)" },
+        "optionAHours": { "type": "string", "description": "Number of hours requested under option A" },
+        "optionBProposedSlots": { "type": "array", "description": "Proposed date/time slots for option B" },
+        "priority": { "type": "string", "description": "Urgency and priority level" },
+        "status": { "type": "string", "description": "Latest status of the appointment request" },
+        "createdAt": { "type": "string", "description": "ISO timestamp when the request was initiated" },
+        "adminNotes": { "type": "string", "description": "Internal notes, remarks, and audit trails logged by the administration" },
+        "rescheduledDate": { "type": "string", "description": "New date proposed during reschedule" },
+        "rescheduledTime": { "type": "string", "description": "New time proposed during reschedule" }
+      },
+      "required": ["refCode", "clientName", "clientCompany", "clientEmail", "status", "createdAt"]
+    },
+    "ExecutiveSlot": {
+      "title": "ExecutiveSlot",
+      "description": "Allocated schedule slot for a specific executive",
+      "type": "object",
+      "properties": {
+        "executive": { "type": "string", "description": "ID or name of the executive" },
+        "date": { "type": "string", "description": "Date of the allocated slot (YYYY-MM-DD)" },
+        "startTime": { "type": "string", "description": "Start time of the slot (HH:MM)" },
+        "endTime": { "type": "string", "description": "End time of the slot (HH:MM)" },
+        "appointmentRef": { "type": "string", "description": "The associated appointment reference code" }
+      },
+      "required": ["executive", "date", "startTime", "endTime", "appointmentRef"]
+    }
+  },
+  "firestore": {
+    "appointments/{appointmentId}": {
+      "schema": "Appointment",
+      "description": "Collection tracking all scheduled or requested corporate sessions"
+    },
+    "executive_slots/{slotId}": {
+      "schema": "ExecutiveSlot",
+      "description": "Collection tracking all confirmed appointments time intervals per executive"
+    }
+  }
+}

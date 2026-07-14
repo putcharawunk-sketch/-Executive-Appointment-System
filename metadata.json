@@ -1,0 +1,6 @@
+{
+  "name": "Executive Appointment Manager",
+  "description": "A clean, luxury appointment manager for executives and high-level clients with client booking, admin dashboard, and appointment status tracker.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

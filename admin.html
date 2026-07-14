@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="th" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Executive Portal — ระบบบริหารจัดการคิวระดับคอร์ปอเรต</title>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#1A1A2E',
+              secondary: '#F8F9FA',
+              accent: '#2C3E50',
+            }
+          }
+        }
+      }
+    </script>
+    <!-- Custom CSS Variables and Overrides -->
+    <link rel="stylesheet" href="/css/custom.css" />
+  </head>
+  <body class="bg-[#F8F9FA] text-[#1A1A2E] antialiased min-h-screen font-sans">
+    
+    <!-- === 1. CENTEERED LOGIN SCREEN === -->
+    <div id="login_screen" class="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden bg-radial from-slate-100 to-slate-200">
+      <div class="absolute inset-0 bg-grid-slate-200 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10"></div>
+      
+      <div class="bg-white w-full max-w-md rounded-2xl p-8 shadow-2xl border border-gray-100 text-center space-y-6 relative z-10 animate-fade-in">
+        
+        <!-- Luxury Corporate Logo Placeholder -->
+        <div class="h-16 w-16 bg-[#1A1A2E] text-white rounded-2xl flex items-center justify-center mx-auto shadow-md transform hover:rotate-3 transition-transform duration-300">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+        </div>
+
+        <div>
+          <h2 class="text-2xl font-serif font-bold text-[#1A1A2E]">เข้าสู่ระบบทีมเลขาผู้บริหาร</h2>
+          <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest font-sans">Executive Secretariat Command</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="admin_login_form" class="space-y-4 text-left">
+          
+          <!-- Email Input -->
+          <div class="flex flex-col">
+            <label for="login_email" class="text-xs font-bold text-gray-500 mb-1 pointer-events-none">ที่อยู่อีเมลแอดมิน (Admin Email)</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+                </svg>
+              </span>
+              <input type="email" id="login_email" required placeholder="putcharawun.k@bu.ac.th" class="luxury-input pl-10 w-full bg-slate-50 focus:bg-white" />
+            </div>
+          </div>
+
+          <!-- Password Input -->
+          <div class="flex flex-col">
+            <label for="login_password" class="text-xs font-bold text-gray-500 mb-1 pointer-events-none">รหัสผ่านบัญชี (Account Password)</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+              </span>
+              <input type="password" id="login_password" required placeholder="••••••••" class="luxury-input pl-10 w-full bg-slate-50 focus:bg-white" />
+            </div>
+          </div>
+
+          <!-- Error Alert Panel -->
+          <div id="login_error_msg" class="text-xs text-red-500 font-semibold bg-red-50 border border-red-100 p-2.5 rounded-lg text-center hidden">
+            <!-- Dynamic feedback -->
+          </div>
+
+          <button id="btn_login_submit" type="submit" class="w-full bg-[#1A1A2E] hover:bg-black text-white font-semibold py-3 px-6 rounded-xl transition-all duration-250 text-sm uppercase tracking-wide cursor-pointer flex justify-center items-center">
+            ลงชื่อเข้าทำงานความปลอดภัยสูง
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+
+    <!-- === 2. REDESIGNED ADMIN DASHBOARD VIEW === -->
+    <div id="dashboard_screen" class="min-h-screen flex flex-col md:flex-row hidden">
+      
+      <!-- LEFT SIDEBAR -->
+      <aside id="sidebar_nav" class="w-full md:w-64 bg-[#1A1A2E] text-white flex-shrink-0 flex flex-col justify-between py-6 border-r border-[#2C3E50]/30 shadow-xl">
+        <div class="space-y-6">
+          
+          <!-- Editorial Sidebar Title -->
+          <div class="px-6 flex items-center space-x-3">
+            <div class="h-8 w-1.5 bg-[#FAF9F6] rounded-full"></div>
+            <div>
+              <h2 class="text-sm font-bold tracking-widest text-slate-100">EXECUTIVE ROOM</h2>
+              <span class="text-[10px] text-gray-400 font-serif italic block">Secretary Command v2026</span>
+            </div>
+          </div>
+
+          <!-- Vertical Navigation Buttons -->
+          <nav class="space-y-1.5 px-3">
+            <button data-nav-target="all" class="sidebar-item w-full text-left px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-150 flex items-center justify-between font-medium cursor-pointer">
+              <span class="flex items-center">
+                <svg class="h-4 w-4 mr-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+                คำขอทั้งหมด
+              </span>
+              <span id="badge_sidebar_all" class="text-[10px] font-mono bg-white/20 text-white min-w-5 h-5 rounded-full flex items-center justify-center px-1 font-bold">0</span>
+            </button>
+
+            <button data-nav-target="pending" class="sidebar-item w-full text-left px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-150 flex items-center justify-between font-medium cursor-pointer">
+              <span class="flex items-center">
+                <svg class="h-4 w-4 mr-2.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                รออนุมัติ
+              </span>
+              <span id="badge_sidebar_pending" class="text-[10px] font-mono bg-amber-500/20 text-amber-400 min-w-5 h-5 rounded-full flex items-center justify-center px-1 font-bold">0</span>
+            </button>
+
+            <button data-nav-target="approved" class="sidebar-item w-full text-left px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-150 flex items-center justify-between font-medium cursor-pointer">
+              <span class="flex items-center">
+                <svg class="h-4 w-4 mr-2.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                อนุมัติแล้ว
+              </span>
+              <span id="badge_sidebar_approved" class="text-[10px] font-mono bg-emerald-500/20 text-emerald-400 min-w-5 h-5 rounded-full flex items-center justify-center px-1 font-bold">0</span>
+            </button>
+
+            <button data-nav-target="rejected" class="sidebar-item w-full text-left px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-150 flex items-center justify-between font-medium cursor-pointer">
+              <span class="flex items-center">
+                <svg class="h-4 w-4 mr-2.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                ปฏิเสธแล้ว
+              </span>
+              <span id="badge_sidebar_rejected" class="text-[10px] font-mono bg-red-500/20 text-red-400 min-w-5 h-5 rounded-full flex items-center justify-center px-1 font-bold">0</span>
+            </button>
+
+            <a href="https://calendar.google.com" target="_blank" class="sidebar-item w-full text-left px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-150 flex items-center justify-between font-medium cursor-pointer">
+              <span class="flex items-center">
+                <svg class="h-4 w-4 mr-2.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                📅 เปิด Google Calendar
+              </span>
+            </a>
+
+            <button data-nav-target="waiting_selection" class="sidebar-item w-full text-left px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-150 flex items-center justify-between font-medium cursor-pointer">
+              <span class="flex items-center">
+                <svg class="h-4 w-4 mr-2.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                รอเลือกคิว
+              </span>
+              <span id="badge_sidebar_waiting_selection" class="text-[10px] font-mono bg-purple-500/20 text-purple-400 min-w-5 h-5 rounded-full flex items-center justify-center px-1 font-bold">0</span>
+            </button>
+
+            <button data-nav-target="cancellation_requested" class="sidebar-item w-full text-left px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-150 flex items-center justify-between font-medium cursor-pointer">
+              <span class="flex items-center">
+                <svg class="h-4 w-4 mr-2.5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                ขอยกเลิก
+              </span>
+              <span id="badge_sidebar_cancellation_requested" class="text-[10px] font-mono bg-red-500/20 text-red-400 min-w-5 h-5 rounded-full flex items-center justify-center px-1 font-bold">0</span>
+            </button>
+
+            <button data-nav-target="reschedule_requested" class="sidebar-item w-full text-left px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-150 flex items-center justify-between font-medium cursor-pointer">
+              <span class="flex items-center">
+                <svg class="h-4 w-4 mr-2.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                ขอเลื่อนนัด
+              </span>
+              <span id="badge_sidebar_reschedule_requested" class="text-[10px] font-mono bg-blue-500/20 text-blue-400 min-w-5 h-5 rounded-full flex items-center justify-center px-1 font-bold">0</span>
+            </button>
+
+            <button data-nav-target="cancelled_pending_delete" class="sidebar-item w-full text-left px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-150 flex items-center justify-between font-medium cursor-pointer">
+              <span class="flex items-center">
+                <svg class="h-4 w-4 mr-2.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                ยกเลิก - ยังไม่ลบ Calendar
+              </span>
+              <span id="badge_sidebar_cancelled_pending_delete" class="text-[10px] font-mono bg-amber-500/20 text-amber-400 min-w-5 h-5 rounded-full flex items-center justify-center px-1 font-bold">0</span>
+            </button>
+
+            <button data-nav-target="cancelled_completed" class="sidebar-item w-full text-left px-4 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-white/10 hover:text-white transition-all duration-150 flex items-center justify-between font-medium cursor-pointer">
+              <span class="flex items-center">
+                <svg class="h-4 w-4 mr-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                ยกเลิก - เสร็จสิ้น
+              </span>
+              <span id="badge_sidebar_cancelled_completed" class="text-[10px] font-mono bg-slate-500/20 text-slate-400 min-w-5 h-5 rounded-full flex items-center justify-center px-1 font-bold">0</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Webhook Config Area -->
+        <div class="px-4 pt-4 border-t border-[#2C3E50]/45">
+          <div class="px-2 mb-2">
+            <span class="text-[9px] uppercase tracking-wider text-gray-400 block pointer-events-none">ตั้งค่า Webhook (Google Apps Script)</span>
+          </div>
+          <div class="space-y-2">
+            <input type="text" id="sidebar_webhook_url" placeholder="https://script.google.com/..." class="w-full bg-[#2C3E50]/40 border border-[#2C3E50] text-xs text-slate-200 px-3 py-1.5 rounded-lg focus:outline-none focus:border-amber-500 placeholder-slate-500" />
+            <button id="save_webhook_btn" class="w-full bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-semibold py-1.5 rounded-lg transition-all flex items-center justify-center space-x-1 cursor-pointer">
+              <span>บันทึก Webhook URL</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sidebar footer area with logout -->
+        <div class="px-4 space-y-4 pt-4 border-t border-[#2C3E50]/40">
+          <div class="px-2">
+            <span class="text-[9px] uppercase tracking-wider text-gray-400 block pointer-events-none">บัญชีผู้ใช้ปัจจุบัน:</span>
+            <span id="logged_admin_email" class="text-xs font-semibold text-slate-200 block truncate pointer-events-none">กำลังโหลดบัญชี...</span>
+          </div>
+          <button id="logout_btn" class="w-full bg-white/10 hover:bg-red-600 hover:text-white text-slate-300 text-xs font-semibold py-2 px-3 rounded-lg transition-all duration-200 flex items-center justify-center space-x-1.5 cursor-pointer">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            <span>ออกจากระบบทีมเลขานุการ</span>
+          </button>
+        </div>
+      </aside>
+
+
+      <!-- MAIN CONTENT STAGE -->
+      <main class="flex-grow p-6 md:p-8 space-y-8 overflow-y-auto max-h-screen">
+        
+        <!-- MAIN AREA TOP APP HEADER -->
+        <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100 pb-5">
+          <div>
+            <span id="current_thai_date" class="text-xs font-mono font-bold text-gray-400 tracking-wider">วันอังคารที่ 23 มิถุนายน 2569</span>
+            <h1 class="text-2xl font-serif font-bold text-[#1A1A2E] mt-0.5">ยินดีต้อนรับกลับทีมเลขานุการบริหาร</h1>
+          </div>
+          <div class="flex items-center space-x-3">
+            <button id="clear_all_data_btn" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all cursor-pointer flex items-center space-x-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+              <span>ล้างข้อมูลทั้งหมด</span>
+            </button>
+            <a href="/" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3.5 py-2 rounded-lg transition-all">
+              หน้าหลักการจองคิว
+            </a>
+          </div>
+        </header>
+
+        <!-- STATS AND REGISTRY VIEW WRAPPER -->
+        <div id="registry_view_container" class="space-y-8">
+
+          <!-- STATISTICS SUMMARIZED CARDS -->
+          <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            
+            <!-- Total Card -->
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs uppercase font-sans tracking-wider text-gray-400 font-bold block">คำขอนัดหมายทั้งหมด</span>
+                <span id="stat_total" class="text-3xl font-bold font-sans text-gray-900 mt-1 block">0</span>
+              </div>
+              <div class="p-3 bg-gray-50 text-gray-500 rounded-xl">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Pending Card -->
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs uppercase font-sans tracking-wider text-amber-500 font-bold block">รอดำเนินการ (Pending)</span>
+                <span id="stat_pending" class="text-3xl font-bold font-sans text-amber-500 mt-1 block">0</span>
+              </div>
+              <div class="p-3 bg-amber-50/50 text-amber-500 rounded-xl">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Approved Card -->
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs uppercase font-sans tracking-wider text-emerald-500 font-bold block">อนุมัติแล้ว (Approved)</span>
+                <span id="stat_approved" class="text-3xl font-bold font-sans text-emerald-500 mt-1 block">0</span>
+              </div>
+              <div class="p-3 bg-emerald-50 text-emerald-500 rounded-xl">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Rescheduled Card -->
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs uppercase font-sans tracking-wider text-blue-500 font-bold block">ข้อเสนอเลื่อนวัน (Rescheduled)</span>
+                <span id="stat_rescheduled" class="text-3xl font-bold font-sans text-blue-500 mt-1 block">0</span>
+              </div>
+              <div class="p-3 bg-blue-50 text-blue-500 rounded-xl">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- FILTERS AND SEARCH SECTION -->
+          <section class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4">
+            
+            <!-- Keyword Search input -->
+            <div class="relative flex-grow md:col-span-2">
+              <input type="text" id="admin_search_input" placeholder="ค้นหาชื่อผู้ร่วมชี้แจง, บริษัท, จุดประสงค์ หรือ รหัสคิวเลขเข้าพบ..." class="luxury-input pl-10 w-full" />
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Status Filter selects -->
+            <div>
+              <select id="admin_status_filter" class="luxury-input w-full bg-white text-gray-700">
+                <option value="all">กรองทุกสถานะใบคำขอ</option>
+                <option value="pending">รอดำเนินการ (Pending)</option>
+                <option value="approved">อนุมัติแล้ว (Approved / Confirmed)</option>
+                <option value="rejected">ปฏิเสธแล้ว (Rejected)</option>
+                <option value="rescheduled">รอเสนอรอบเวลาเลื่อนใหม่ (Rescheduled)</option>
+                <option value="reschedule_requested">ลูกค้าขอเลื่อนนัด (Reschedule Requested)</option>
+                <option value="cancellation_requested">ลูกค้าขอยกเลิกนัด (Cancellation Requested)</option>
+              </select>
+            </div>
+
+            <!-- Executive Filter selects -->
+            <div>
+              <select id="admin_exec_filter" class="luxury-input w-full bg-white text-gray-700">
+                <option value="all">ตรวจสอบผู้บริหารทุกคน</option>
+                <!-- Populated dynamicaly via JS -->
+              </select>
+            </div>
+
+          </section>
+
+          <!-- APPOINTMENTS REGISTRY TABLE CARD WITH FILTER TABS -->
+          <section class="bg-white rounded-xl border border-gray-100 shadow-md overflow-hidden animate-fade-in flex flex-col">
+            
+            <!-- Filter Tabs for Instant Tab Switching (ทั้งหมด / รอดำเนินการ / อนุมัติแล้ว / ปฏิเสธ / ขอยกเลิก / ยกเลิกแล้ว) -->
+            <div class="flex border-b border-gray-100 bg-gray-50/50 px-6 py-1.5 space-x-1 overflow-x-auto scrollbar-none">
+              <button data-tab-status="all" class="px-4 py-3 text-xs font-semibold rounded-t-lg border-b-2 border-transparent text-gray-500 hover:text-[#1A1A2E] active-tab font-sans cursor-pointer whitespace-nowrap">
+                คำขอทั้งหมด
+              </button>
+              <button data-tab-status="pending" class="px-4 py-3 text-xs font-semibold rounded-t-lg border-b-2 border-transparent text-gray-500 hover:text-[#1A1A2E] font-sans cursor-pointer whitespace-nowrap">
+                ⏳ รอดำเนินการ
+              </button>
+              <button data-tab-status="approved" class="px-4 py-3 text-xs font-semibold rounded-t-lg border-b-2 border-transparent text-gray-500 hover:text-[#1A1A2E] font-sans cursor-pointer whitespace-nowrap">
+                🟢 อนุมัติแล้ว
+              </button>
+              <button data-tab-status="rejected" class="px-4 py-3 text-xs font-semibold rounded-t-lg border-b-2 border-transparent text-gray-500 hover:text-[#1A1A2E] font-sans cursor-pointer whitespace-nowrap">
+                🔴 ปฏิเสธ
+              </button>
+              <button data-tab-status="reschedule_requested" class="px-4 py-3 text-xs font-semibold rounded-t-lg border-b-2 border-transparent text-gray-500 hover:text-[#1A1A2E] font-sans cursor-pointer whitespace-nowrap">
+                🔵 ขอเลื่อนนัด
+              </button>
+              <button data-tab-status="cancellation_requested" class="px-4 py-3 text-xs font-semibold rounded-t-lg border-b-2 border-transparent text-gray-500 hover:text-[#1A1A2E] font-sans cursor-pointer whitespace-nowrap">
+                ⚠️ ขอยกเลิก
+              </button>
+              <button data-tab-status="cancelled" class="px-4 py-3 text-xs font-semibold rounded-t-lg border-b-2 border-transparent text-gray-500 hover:text-[#1A1A2E] font-sans cursor-pointer whitespace-nowrap">
+                🚫 ยกเลิกแล้ว
+              </button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="divide-y divide-gray-150" style="table-layout: fixed; min-width: 1100px; width: 1100px;">
+                <thead class="bg-gray-50/70">
+                  <tr class="text-left font-sans text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                    <th class="px-4 py-4" style="width: 160px; min-width: 160px; max-width: 160px; overflow: hidden;">Ref Code</th>
+                    <th class="px-4 py-4" style="width: 130px; min-width: 130px; max-width: 130px; overflow: hidden;">ชื่อ + เบอร์</th>
+                    <th class="px-4 py-4" style="width: 80px; min-width: 80px; max-width: 80px; overflow: hidden;">บริษัท</th>
+                    <th class="px-4 py-4" style="width: 160px; min-width: 160px; max-width: 160px; overflow: hidden;">ผู้บริหาร</th>
+                    <th class="px-4 py-4" style="width: 110px; min-width: 110px; max-width: 110px; overflow: hidden;">ประเภท</th>
+                    <th class="px-4 py-4" style="width: 150px; min-width: 150px; max-width: 150px; overflow: hidden;">หัวข้อ</th>
+                    <th class="px-4 py-4 text-center" style="width: 70px; min-width: 70px; max-width: 70px; overflow: hidden;">ความสำคัญ</th>
+                    <th class="px-4 py-4" style="width: 120px; min-width: 120px; max-width: 120px; overflow: hidden;">วันที่+เวลา</th>
+                    <th class="px-4 py-4" style="width: 130px; min-width: 130px; max-width: 130px; overflow: hidden;">สถานะ</th>
+                    <th class="px-4 py-4 text-right" style="width: 120px; min-width: 120px; max-width: 120px; overflow: hidden;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="appointments_table_body" class="bg-white divide-y divide-gray-100">
+                  <!-- Sync from Firestore snaps loaded via JS -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+        </div>
+
+      </main>
+    </div>
+
+
+    <!-- EDIT DETAIL AND MANAGEMENT MODAL POPUP -->
+    <div id="edit_modal" class="fixed inset-0 bg-[#1A1A2E]/50 backdrop-blur-sm z-50 justify-center items-center p-4 hidden">
+      <div class="bg-white w-full max-w-xl rounded-2xl shadow-2xl border border-gray-100 animate-fade-in overflow-hidden max-h-[90vh] flex flex-col">
+        
+        <!-- Modal Banner Header -->
+        <div class="bg-[#1A1A2E] text-white py-5 px-6 flex justify-between items-center">
+          <div class="flex items-center space-x-2">
+            <span class="text-amber-400 font-mono text-xs font-bold px-2 py-0.5 bg-white/10 rounded">MANAGEMENT</span>
+            <h3 class="text-lg font-serif">จัดการคำขอ: <span id="edit_ref_code" class="font-mono text-amber-400">EXE-XXXXXX</span></h3>
+          </div>
+          <button id="close_modal_btn" class="text-gray-300 hover:text-white transition-colors cursor-pointer p-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Modal Body (Scrollable) -->
+        <div class="p-6 overflow-y-auto space-y-6 flex-grow font-sans text-sm">
+          
+          <!-- Section 1: Client Card Details -->
+          <div id="edit_client_info" class="bg-slate-50 border border-slate-100 p-4 rounded-xl space-y-2">
+            <!-- Loaded dynamically inside js -->
+          </div>
+
+          <!-- Section 2: Purpose display -->
+          <div>
+            <h4 class="text-xs uppercase font-bold tracking-wider text-gray-400 mb-1.5 font-sans">วัตถุประสงค์เข้าพบ</h4>
+            <div class="bg-white border rounded-xl p-3 font-serif italic text-gray-600 leading-relaxed max-h-24 overflow-y-auto">
+              "<span id="edit_purpose"></span>"
+            </div>
+          </div>
+
+          <!-- Timeline History Section -->
+          <div id="timeline_section" class="bg-slate-50 border border-slate-100 p-4 rounded-xl space-y-3 hidden">
+            <div class="flex items-center justify-between border-b pb-2">
+              <h4 class="text-xs uppercase font-bold tracking-wider text-gray-500 font-sans flex items-center space-x-1.5">
+                <span>🕒 ประวัติการดำเนินการ (Timeline History)</span>
+              </h4>
+              <span id="timeline_count_badge" class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded-full font-mono">0 events</span>
+            </div>
+            <div id="timeline_list" class="space-y-3 max-h-56 overflow-y-auto pr-1">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+
+          <!-- Section 3: Form actions updating DB -->
+          <form id="edit_form" class="space-y-5">
+            
+            <!-- Status selection -->
+            <div class="flex flex-col hidden">
+              <label for="edit_status" class="text-xs font-bold text-gray-600 uppercase mb-1.5">ปรับอัปเดตสถานนัดหมาย (Status Action)</label>
+              <select id="edit_status" required class="luxury-input w-full bg-white italic font-semibold text-gray-700">
+                <option value="pending">รอดำเนินการ (Pending) — ตรวจสอบและเช็คคิวภารกิจ</option>
+                <option value="approved">อนุมัติคำขอแล้ว (Approved) — ลงประวัติเข้าระบบวาระอย่างเป็นทางการ</option>
+                <option value="pending_client_selection">จัดสรรคิวให้ลูกค้าเลือก (Offer Slots) — เสนอ 2-3 ช่วงคิว</option>
+                <option value="rejected">ปฏิเสธคำขอ (Rejected) — ยกเลิกคำขอพบเนื่องติดคิวด่วน</option>
+                <option value="rescheduled">ผู้บริหารขอเสอนเลื่อนเวลา (Rescheduled) — ยื่นเสนอปรับช่วงกำหนดใหม่</option>
+                <option value="cancellation_requested">คำขอเลื่อน/ยกเลิก (Cancellation Requested)</option>
+                <option value="cancelled">ยกเลิกการนัดหมายสมบูรณ์ (Cancelled)</option>
+              </select>
+            </div>
+
+            <!-- Custom Step-by-Step Action Guidelines as requested -->
+            <div id="step_by_step_container" class="space-y-4">
+              <!-- Dynamically populated in admin.js -->
+            </div>
+
+             <!-- Approval specifications (shows dynamically) -->
+            <div id="approval_fields" class="bg-emerald-50/50 border border-emerald-100 p-4 rounded-xl space-y-3 hidden">
+              <span class="text-xs uppercase font-bold text-emerald-800 tracking-wider block border-b pb-1.5">วันเวลาที่อนุมัตินัดหมายอย่างเป็นทางการ (Approval Specs)</span>
+              
+              <div id="option_b_proposals_panel" class="hidden text-xs bg-white p-3 rounded-lg border border-emerald-100 space-y-1.5 mb-2 text-gray-700">
+                <span class="font-bold text-emerald-700 block">ตัวเลือกที่ลูกค้าเสนอ (Option B) - คลิกเลือกได้เลย:</span>
+                <div id="option_b_slots_list" class="space-y-1"></div>
+              </div>
+
+              <div id="option_a_info_panel" class="hidden text-xs bg-white p-3 rounded-lg border border-emerald-100 mb-2 text-gray-700">
+                <span class="font-bold text-emerald-700 block">ลูกค้าแจ้ง Option A:</span>
+                <p class="mt-0.5">ระบุเวลาเข้าพบที่ต้องการคือจำนวน <span id="option_a_hours_text" class="font-bold text-emerald-800"></span> ชั่วโมง (กรุณาจัดสรรวันและช่วงกำหนดเวลาด้านล่าง)</p>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col">
+                  <label for="edit_approved_date" class="text-xs text-emerald-700 mb-1">วันที่อนุมัติเข้าระบบวาระ</label>
+                  <input type="date" id="edit_approved_date" class="luxury-input border-emerald-200 focus:border-emerald-500 w-full" />
+                </div>
+                <div class="flex flex-col">
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label for="edit_approved_start_time" class="text-[11px] text-emerald-700 mb-1">เวลาเริ่ม *</label>
+                      <input type="time" id="edit_approved_start_time" class="luxury-input border-emerald-200 focus:border-emerald-500 w-full" />
+                    </div>
+                    <div>
+                      <label for="edit_approved_end_time" class="text-[11px] text-emerald-700 mb-1">เวลาสิ้นสุด *</label>
+                      <input type="time" id="edit_approved_end_time" class="luxury-input border-emerald-200 focus:border-emerald-500 w-full" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rejection specifications (shows dynamically) -->
+            <div id="rejection_fields" class="bg-red-50/50 border border-red-100 p-4 rounded-xl space-y-3 hidden">
+              <span class="text-xs uppercase font-bold text-red-800 tracking-wider block border-b pb-1.5">เหตุผลการปฏิเสธคำขอ (Rejection Reason)</span>
+              <div class="flex flex-col">
+                <label for="edit_rejection_reason" class="text-xs text-red-700 mb-1">ระบุเหตุผลในการไม่สามารถอนุมัตินัดเข้าพบได้ (Required)</label>
+                <textarea id="edit_rejection_reason" rows="2" placeholder="กรุณาระบุเหตุผลการปฏิเสธ เพื่อแจ้งให้ลูกค้าสืบค้นตรวจสอบสถานะทราบ..." class="luxury-input border-red-200 focus:border-red-500 w-full resize-none"></textarea>
+              </div>
+            </div>
+
+            <!-- Reschedule specifications (shows dynamically) -->
+            <div id="reschedule_fields" class="bg-blue-50/50 border border-blue-100 p-4 rounded-xl space-y-3 hidden">
+              <span class="text-xs uppercase font-bold text-blue-800 tracking-wider block border-b pb-1.5">ข้อเสนอเลื่อนนัดเข้าพบใหม่ (Reschedule Specs)</span>
+              
+              <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col">
+                  <label for="edit_reschedule_date" class="text-xs text-blue-700 mb-1">วันที่ต้องการเลื่อนใหม่</label>
+                  <input type="date" id="edit_reschedule_date" class="luxury-input border-blue-200 focus:border-blue-500 w-full" />
+                </div>
+                <div class="flex flex-col">
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label for="edit_reschedule_start_time" class="text-[11px] text-blue-700 mb-1">เวลาเริ่ม *</label>
+                      <input type="time" id="edit_reschedule_start_time" class="luxury-input border-blue-200 focus:border-blue-500 w-full" />
+                    </div>
+                    <div>
+                      <label for="edit_reschedule_end_time" class="text-[11px] text-blue-700 mb-1">เวลาสิ้นสุด *</label>
+                      <input type="time" id="edit_reschedule_end_time" class="luxury-input border-blue-200 focus:border-blue-500 w-full" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Offer slots fields (shows dynamically) -->
+            <div id="offer_slots_fields" class="bg-purple-50/50 border border-purple-100 p-4 rounded-xl space-y-3 hidden">
+              <span class="text-xs uppercase font-bold text-purple-800 tracking-wider block border-b pb-1.5 font-sans">จัดสรรช่วงคิวเสนอให้เลือก (Offer Slots Specs)</span>
+              
+              <div class="text-xs bg-white p-3 rounded-lg border border-purple-100 mb-2 text-gray-700">
+                <span class="font-bold text-purple-700 block">ชั่วโมงการนัดหมายที่ขอกลางระบบ:</span>
+                <p class="mt-0.5 font-sans">จำนวน <span id="offer_slots_hours_text" class="font-bold text-purple-800">1</span> ชั่วโมง (ระบบจะใช้ในการตรวจสอบคิวซ้อนทับ)</p>
+              </div>
+
+              <!-- Slot 1 -->
+              <div class="space-y-1.5 p-2.5 bg-white border border-purple-100 rounded-lg">
+                <span class="text-xs font-bold text-purple-700 block font-sans">📌 คิวเสนอตัวเลือกที่ 1 (บังคับกรอก)</span>
+                <div class="grid grid-cols-3 gap-2">
+                  <div class="flex flex-col">
+                    <label for="offer_slot_date_1" class="text-[10px] text-gray-500 mb-1 font-medium font-sans">วันที่เสนอ คิว 1</label>
+                    <input type="date" id="offer_slot_date_1" class="luxury-input w-full text-xs" />
+                  </div>
+                  <div class="flex flex-col">
+                    <label for="offer_slot_start_time_1" class="text-[10px] text-gray-500 mb-1 font-medium font-sans">เวลาเริ่ม คิว 1</label>
+                    <input type="time" id="offer_slot_start_time_1" class="luxury-input w-full text-xs" />
+                  </div>
+                  <div class="flex flex-col">
+                    <label for="offer_slot_end_time_1" class="text-[10px] text-gray-500 mb-1 font-medium font-sans">เวลาสิ้นสุด คิว 1</label>
+                    <input type="time" id="offer_slot_end_time_1" class="luxury-input w-full text-xs" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slot 2 -->
+              <div class="space-y-1.5 p-2.5 bg-white border border-purple-100 rounded-lg">
+                <span class="text-xs font-bold text-purple-700 block font-sans">📌 คิวเสนอตัวเลือกที่ 2 <span id="slot_2_required_label" class="text-red-500 hidden">*</span></span>
+                <div class="grid grid-cols-3 gap-2">
+                  <div class="flex flex-col">
+                    <label for="offer_slot_date_2" class="text-[10px] text-gray-500 mb-1 font-medium font-sans">วันที่เสนอ คิว 2</label>
+                    <input type="date" id="offer_slot_date_2" class="luxury-input w-full text-xs" />
+                  </div>
+                  <div class="flex flex-col">
+                    <label for="offer_slot_start_time_2" class="text-[10px] text-gray-500 mb-1 font-medium font-sans">เวลาเริ่ม คิว 2</label>
+                    <input type="time" id="offer_slot_start_time_2" class="luxury-input w-full text-xs" />
+                  </div>
+                  <div class="flex flex-col">
+                    <label for="offer_slot_end_time_2" class="text-[10px] text-gray-500 mb-1 font-medium font-sans">เวลาสิ้นสุด คิว 2</label>
+                    <input type="time" id="offer_slot_end_time_2" class="luxury-input w-full text-xs" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slot 3 -->
+              <div class="space-y-1.5 p-2.5 bg-white border border-purple-100 rounded-lg">
+                <span class="text-xs font-bold text-purple-700 block font-sans">📌 คิวเสนอตัวเลือกที่ 3 <span id="slot_3_required_label" class="text-red-500 hidden">*</span></span>
+                <div class="grid grid-cols-3 gap-2">
+                  <div class="flex flex-col">
+                    <label for="offer_slot_date_3" class="text-[10px] text-gray-500 mb-1 font-medium font-sans">วันที่เสนอ คิว 3</label>
+                    <input type="date" id="offer_slot_date_3" class="luxury-input w-full text-xs" />
+                  </div>
+                  <div class="flex flex-col">
+                    <label for="offer_slot_start_time_3" class="text-[10px] text-gray-500 mb-1 font-medium font-sans">เวลาเริ่ม คิว 3</label>
+                    <input type="time" id="offer_slot_start_time_3" class="luxury-input w-full text-xs" />
+                  </div>
+                  <div class="flex flex-col">
+                    <label for="offer_slot_end_time_3" class="text-[10px] text-gray-500 mb-1 font-medium font-sans">เวลาสิ้นสุด คิว 3</label>
+                    <input type="time" id="offer_slot_end_time_3" class="luxury-input w-full text-xs" />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Secretary notes -->
+            <div class="flex flex-col">
+              <label for="edit_admin_notes" class="text-xs font-bold text-gray-600 uppercase mb-1.5">บันทึกเพิ่มเติมจากเลขานุการส่วนบริหาร (Admin Notes)</label>
+              <textarea id="edit_admin_notes" rows="3" placeholder="ระบุเหตุผลในการทำงาน หรือบันทึกเพื่อแจ้งผู้เข้าพบให้สืบค้นทราบผ่านระบบ..." class="luxury-input w-full resize-none"></textarea>
+            </div>
+
+            <!-- Google Calendar Deletion Confirmation Section -->
+            <div id="calendar_deletion_section" class="hidden"></div>
+
+            <!-- Action footer buttons inside modal -->
+            <div class="pt-2 flex justify-end space-x-3 border-t border-gray-100">
+              <button type="button" id="btn_cancel_modal" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-sans text-xs font-semibold py-2.5 px-4 rounded-xl transition-all cursor-pointer">
+                ยกเลิกปิดหน้าต่าง
+              </button>
+              <button type="submit" class="bg-[#1A1A2E] hover:bg-black text-white font-sans text-xs font-semibold py-2.5 px-6 rounded-xl transition-all cursor-pointer">
+                บันทึกการตัดสินใจ
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Minimalist Footer Area -->
+    <footer class="py-6 bg-white border-t border-gray-100 px-6 text-center text-xs text-gray-400 font-light mt-auto">
+      <p>&copy; 2026 Executive Appointment Registry & Sec Command Hub. For corporate use only.</p>
+    </footer>
+
+    <!-- Admin dashboard script controller module -->
+    <script type="module" src="/js/admin.js"></script>
+  </body>
+</html>

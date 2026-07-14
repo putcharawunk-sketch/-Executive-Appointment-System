@@ -1,0 +1,116 @@
+/* 
+  Executive Appointment Manager - Custom Style Stylesheet
+  Theme: Clean & Luxury White-Gray 
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --color-primary: #1A1A2E;     /* Deep navy text and headers */
+  --color-secondary: #F8F9FA;   /* Subtle light background */
+  --color-accent: #2C3E50;      /* Dark slate brand accent */
+  
+  /* Status Colors */
+  --color-pending: #F59E0B;
+  --color-approved: #10B981;
+  --color-rejected: #EF4444;
+  --color-rescheduled: #3B82F6;
+  
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-primary);
+  background-color: #FFFFFF;
+}
+
+h1, h2, h3, .font-serif {
+  font-family: var(--font-serif);
+}
+
+/* Luxury transitions and interactive elements */
+.transition-luxury {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Luxury card shadow and border styling */
+.card-luxury {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.02), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+}
+
+.card-luxury:hover {
+  border-color: rgba(44, 62, 80, 0.2);
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
+}
+
+/* Custom Status Badges */
+.badge-pending {
+  background-color: rgba(245, 158, 11, 0.08);
+  color: var(--color-pending);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.badge-approved {
+  background-color: rgba(16, 185, 129, 0.08);
+  color: var(--color-approved);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.badge-rejected {
+  background-color: rgba(239, 68, 68, 0.08);
+  color: var(--color-rejected);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.badge-rescheduled {
+  background-color: rgba(59, 130, 246, 0.08);
+  color: var(--color-rescheduled);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F8F9FA;
+}
+::-webkit-scrollbar-thumb {
+  background: #E5E7EB;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #D1D5DB;
+}
+
+/* Animate entries */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Inputs styling */
+.luxury-input {
+  border: 1px solid #E5E7EB;
+  background-color: #FFFFFF;
+  color: var(--color-primary);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.luxury-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.06);
+}

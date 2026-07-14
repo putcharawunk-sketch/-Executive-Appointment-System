@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="th" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Check Appointment Status—Executive Registry</title>
+    <!-- Tailwind Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#1A1A2E',
+              secondary: '#F8F9FA',
+              accent: '#2C3E50',
+            }
+          }
+        }
+      }
+    </script>
+    <!-- Custom CSS Variables and Overrides -->
+    <link rel="stylesheet" href="/css/custom.css" />
+    <style>
+      /* Hide navigation & input forms during printing, focus exclusively on the confirmation ticket card */
+      @media print {
+        header, footer, #search_section, #btn_print_receipt, #reschedule_actions {
+          display: none !important;
+        }
+        body {
+          background-color: #FFFFFF !important;
+          color: #000000 !important;
+        }
+        #status_result_card {
+          border: none !important;
+          box-shadow: none !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          width: 100% !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 flex flex-col min-h-full">
+    
+    <!-- Top Minimalist Banner -->
+    <header class="bg-white border-b border-gray-100 py-6 px-4">
+      <div class="max-w-4xl mx-auto flex justify-between items-center">
+        <a href="index.html" class="flex items-center space-x-3 hover:opacity-85 transition-opacity">
+          <div class="h-8 w-1 bg-[#1A1A2E]"></div>
+          <div>
+            <h1 class="text-xs uppercase tracking-widest text-[#2C3E50] font-sans font-semibold">Executive Suite</h1>
+            <p class="text-sm font-serif italic text-gray-500">Appointment Registry</p>
+          </div>
+        </a>
+        <div class="flex space-x-4 text-xs font-medium uppercase tracking-wider">
+          <a href="index.html" class="text-gray-500 hover:text-[#1A1A2E] transition-colors">จองนัดหมาย</a>
+          <span class="text-gray-200">|</span>
+          <a href="admin.html" class="text-gray-500 hover:text-[#1A1A2E] transition-colors">แอดมิน</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content State -->
+    <main class="flex-grow max-w-3xl w-full mx-auto p-4 flex flex-col justify-start py-10 space-y-8">
+      
+      <!-- Lookup Form Section -->
+      <section id="search_section" class="card-luxury p-8 bg-white animate-fade-in">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl font-serif text-[#1A1A2E]">สืบค้นข้อมูลและตรวจสอบสถานะนัดหมาย</h2>
+          <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest font-sans">Check Appointment Status by Reference Code</p>
+        </div>
+
+        <form id="status_search_form" class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-grow">
+            <!-- Magnifying Glass Icon -->
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <svg class="h-4.5 w-4.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+            <input type="text" id="search_ref_code" required placeholder="วางรหัสอ้างอิงของคุณที่นี่ (ตัวอย่าง: EXE-H2B4K9)" class="luxury-input pl-11 w-full font-mono uppercase tracking-widest text-base" />
+          </div>
+          <button type="submit" class="bg-[#1A1A2E] hover:bg-[#2C3E50] text-white font-sans text-sm font-semibold tracking-wide py-3 px-6 rounded transition-all duration-200 shadow-sm shrink-0">
+            ตรวจสอบข้อมูลนัดหมาย
+          </button>
+        </form>
+      </section>
+
+      <!-- Dynamic Rendering Target Card -->
+      <section id="status_result_card" class="card-luxury p-8 bg-white shadow-md hidden">
+        <!-- Built and rendered dynamically by status.js -->
+      </section>
+
+    </main>
+
+    <!-- Cancellation Modal -->
+    <div id="cancel_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+      <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-100 transition-all duration-200 transform scale-100">
+        <!-- Header -->
+        <div class="bg-red-50 border-b border-red-100 px-6 py-4 flex items-center space-x-2">
+          <span class="text-red-500 text-lg">⚠️</span>
+          <h3 id="cancel_modal_title" class="text-base font-bold text-red-950">ยืนยันการขอยกเลิกนัดหมาย</h3>
+        </div>
+        <!-- Content -->
+        <div class="p-6 space-y-4">
+          <div id="cancel_custom_msg" class="text-sm font-semibold text-red-700 bg-red-50 p-3 rounded-lg border border-red-200 hidden whitespace-pre-line"></div>
+          <div class="bg-gray-50 rounded-lg p-4 space-y-2 text-sm text-gray-700">
+            <div><span class="text-gray-400">คิว:</span> <span id="cancel_ref_code_disp" class="font-mono font-bold text-gray-900">-</span></div>
+            <div><span class="text-gray-400">วันนัด:</span> <span id="cancel_date_time_disp" class="font-semibold text-gray-900">-</span></div>
+            <div><span class="text-gray-400">ผู้บริหาร:</span> <span id="cancel_exec_disp" class="font-semibold text-gray-900">-</span></div>
+          </div>
+          <div>
+            <label id="cancel_reason_label" class="block text-xs font-semibold text-gray-500 mb-1">เหตุผล (ถ้ามี):</label>
+            <textarea id="cancel_reason" rows="3" placeholder="ระบุเหตุผล (ไม่บังคับ)..." class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"></textarea>
+          </div>
+        </div>
+        <!-- Footer -->
+        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t border-gray-100">
+          <button id="cancel_modal_close" class="px-4 py-2 text-xs font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">ยกเลิก/ปิด</button>
+          <button id="cancel_modal_confirm" class="px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors cursor-pointer shadow-sm">ยืนยันขอยกเลิก</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reschedule Modal -->
+    <div id="reschedule_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+      <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden border border-gray-100 transition-all duration-200 transform scale-100">
+        <!-- Header -->
+        <div class="bg-blue-50 border-b border-blue-100 px-6 py-4 flex items-center space-x-2">
+          <span class="text-blue-500 text-lg">📅</span>
+          <h3 id="reschedule_modal_title" class="text-base font-bold text-blue-950">ขอเลื่อนวันนัดหมาย</h3>
+        </div>
+        <!-- Content -->
+        <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+          <div id="reschedule_custom_msg" class="text-sm font-semibold text-blue-700 bg-blue-50 p-3 rounded-lg border border-blue-200 hidden whitespace-pre-line"></div>
+          <div id="reschedule_current_time_box" class="bg-gray-50 rounded-lg p-4 space-y-2 text-sm text-gray-700">
+            <div><span class="text-gray-400">คิวปัจจุบัน:</span> <span id="reschedule_current_time_disp" class="font-semibold text-gray-900">-</span></div>
+          </div>
+          
+          <!-- Reschedule Type Selection -->
+          <div class="space-y-2">
+            <span class="block text-xs font-bold uppercase tracking-wider text-gray-400">รูปแบบการเสนอวัน:</span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <label class="flex items-center space-x-2.5 text-xs cursor-pointer p-3 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors">
+                <input type="radio" name="reschedule_type" value="specific_dates" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500" />
+                <span class="text-slate-700 font-medium">ระบุวันที่ต้องการ (สูงสุด 3 วัน)</span>
+              </label>
+              <label class="flex items-center space-x-2.5 text-xs cursor-pointer p-3 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors">
+                <input type="radio" name="reschedule_type" value="date_range" class="h-4 w-4 text-blue-600 focus:ring-blue-500" />
+                <span class="text-slate-700 font-medium">ระบุช่วงวันที่ (ให้เลขาจัดให้)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Dynamic UI sections -->
+          <div id="reschedule_specific_dates_container" class="space-y-3">
+            <div id="reschedule_slots_list" class="space-y-2.5">
+              <!-- Dynamically rendered -->
+            </div>
+            <button type="button" id="btn_add_reschedule_slot" class="w-full py-2 border border-dashed border-blue-300 rounded-lg text-xs font-semibold text-blue-600 hover:bg-blue-50 transition-colors flex items-center justify-center space-x-1">
+              <span>+ เพิ่มวันที่ต้องการ</span>
+            </button>
+          </div>
+
+          <div id="reschedule_date_range_container" class="space-y-3 hidden">
+            <p class="text-xs text-gray-500 font-semibold">ช่วงวันที่ที่ต้องการ:</p>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[11px] text-gray-400 mb-1">วันเริ่มต้น *</label>
+                <input type="date" id="reschedule_range_from" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-400 mb-1">วันสิ้นสุด</label>
+                <input type="date" id="reschedule_range_to" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+              </div>
+            </div>
+            <p class="text-[11px] text-gray-400 mt-1">* หมายเหตุ: เลขาฯ จะจัดสรรวันและเวลาที่เหมาะสมให้ท่านในช่วงดังกล่าว</p>
+          </div>
+
+          <div>
+            <label id="reschedule_reason_label" class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">เหตุผลการขอเลื่อนนัด *:</label>
+            <textarea id="reschedule_reason" rows="3" placeholder="กรุณาระบุเหตุผลในการขอเลื่อนนัด..." class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required></textarea>
+          </div>
+        </div>
+        <!-- Footer -->
+        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 border-t border-gray-100">
+          <button id="reschedule_modal_close" class="px-4 py-2 text-xs font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">ยกเลิก/ปิด</button>
+          <button id="reschedule_modal_confirm" class="px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors cursor-pointer shadow-sm">ส่งคำขอเลื่อนนัด</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Area -->
+    <footer class="py-8 bg-white border-t border-gray-100 px-4 text-center mt-auto">
+      <div class="max-w-4xl mx-auto space-y-1.5">
+        <p class="text-xs text-gray-400 font-light">&copy; 2026 Executive Appointment Registry. All rights reserved.</p>
+        <p class="text-xs text-gray-300">สามารถติดต่อแผนกวิชาการหรือเลขานุการส่วนงานต่าง ๆ ได้ผ่านทางโทรศัพท์ส่วนกลางของส่วนบริหารงาน</p>
+      </div>
+    </footer>
+
+    <!-- Status Portal Script -->
+    <script type="module" src="/js/status.js"></script>
+  </body>
+</html>
