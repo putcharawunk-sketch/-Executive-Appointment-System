@@ -20,6 +20,15 @@ const FRONTEND_BASE_URL = 'https://chimerical-mandazi-f22a66.netlify.app';
 var lastEmailThreadId = null;
 var lastEmailMessageId = null;
 
+function getAdminEmail(appData) {
+  if (!appData) return ADMIN_EMAIL;
+  var host = appData.executiveHost || appData.executiveId || '';
+  if (host.indexOf('สรรเสริญ') !== -1 || host.indexOf('รอ.วก.') !== -1) {
+    return 'pimapsorn.s@bu.ac.th';
+  }
+  return 'putcharawun.k@bu.ac.th';
+}
+
 // ==========================================
 // 2. ENTRY POINT FOR HTTP GET
 // ==========================================
@@ -402,7 +411,7 @@ function handleNotifyAdminSelection(appData, result) {
   const htmlBody = getAdminSelectionNotificationTemplate(appData, dateDisplay, timeDisplay, adminLink);
   
   // ส่งให้ Admin (ไม่ใส่ refCode เพราะนี่คืออีเมลถึง Admin ไม่ใช่ลูกค้า)
-  sendHtmlEmail(ADMIN_EMAIL, subject, htmlBody, '', null);
+  sendHtmlEmail(getAdminEmail(appData), subject, htmlBody, '', null);
   
   result.success = true;
   result.message = "จัดส่งเมลแจ้งเตือนการเลือกสิทธิ์เวลาของลูกค้าไปยังเลขาฯ และคืนตารางว่างบน Google Calendar แล้ว";
@@ -418,7 +427,7 @@ function handleConfirmedReschedule(appData, result) {
   const htmlBody = getAdminConfirmedRescheduleTemplate(appData, dateDisplay, timeDisplay, adminLink);
   
   // ส่งให้ Admin (ไม่ใส่ refCode เพราะนี่คืออีเมลถึง Admin ไม่ใช่ลูกค้า)
-  sendHtmlEmail(ADMIN_EMAIL, subject, htmlBody, '', null);
+  sendHtmlEmail(getAdminEmail(appData), subject, htmlBody, '', null);
   
   result.success = true;
   result.message = "จัดส่งอีเมลแจ้งเตือนการยืนยันเลื่อนเวลานัดหมายใหม่ของลูกค้าไปยังเลขาฯ เรียบร้อยแล้ว";
@@ -431,7 +440,7 @@ function handleCancelRequest(appData, result) {
   const htmlBody = getAdminCancellationRequestTemplate(appData, adminLink);
   
   // ส่งให้ Admin (ไม่ใส่ refCode เพราะนี่คืออีเมลถึง Admin)
-  sendHtmlEmail(ADMIN_EMAIL, subject, htmlBody, '', null);
+  sendHtmlEmail(getAdminEmail(appData), subject, htmlBody, '', null);
   
   result.success = true;
   result.message = "ส่งคำร้องขอยกเลิกนัดหมายไปยังกล่องข้อความเลขาฯ แล้ว";
@@ -447,7 +456,7 @@ function handleRescheduleRequest(appData, result) {
   const htmlBody = getAdminRescheduleRequestTemplate(appData, adminLink);
   
   // ส่งให้ Admin (ไม่ใส่ refCode เพราะนี่คืออีเมลถึง Admin)
-  sendHtmlEmail(ADMIN_EMAIL, subject, htmlBody, '', null);
+  sendHtmlEmail(getAdminEmail(appData), subject, htmlBody, '', null);
   
   // ลบ events ทั้งหมดที่เกี่ยวข้องทันที เพราะขอเสนอวันใหม่เพื่อเคลียร์ตารางเก่า
   deleteAllAssociatedCalendarEvents(appData.refCode);
@@ -483,7 +492,7 @@ function handleNewBookingNotification(appData, result) {
   const htmlBody = getAdminNewBookingNotificationTemplate(appData, adminLink);
   
   // ส่งให้ Admin
-  sendHtmlEmail(ADMIN_EMAIL, subject, htmlBody, '', null);
+  sendHtmlEmail(getAdminEmail(appData), subject, htmlBody, '', null);
   
   result.success = true;
   result.message = "แจ้งเตือนทางอีเมลส่งไปยังเลขานุการเรียบร้อยแล้ว";
@@ -1413,7 +1422,7 @@ function getAdminConfirmedRescheduleTemplate(app, dateDisplay, timeDisplay, admi
   return `
     <div style="background-color: #F1F5F9; padding: 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
       <div style="max-width: 600px; margin: 0 auto; background-color: #FFFFFF; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #E2E8F0;">
-        \${getHeaderHtml("CLIENT CONFIRMED RESCHEDULE", "ลูกค้ายืนยันรับเวลาใหม่และเลื่อนนัดหมาย")}
+        ${getHeaderHtml("CLIENT CONFIRMED RESCHEDULE", "ลูกค้ายืนยันรับเวลาใหม่และเลื่อนนัดหมาย")}
         <div style="padding: 32px 24px;">
           <div style="height: 4px; width: 60px; background-color: #10B981; border-radius: 2px; margin-bottom: 24px;"></div>
           <h2 style="font-size: 17px; font-weight: 700; color: #1E293B; margin-top: 0; margin-bottom: 12px;">เรียน แผนกเลขานุการ</h2>
@@ -1424,33 +1433,33 @@ function getAdminConfirmedRescheduleTemplate(app, dateDisplay, timeDisplay, admi
             <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
               <tr style="border-bottom: 1px dashed #BBF7D0;">
                 <td style="padding: 6px 0; color: #166534; font-weight: bold; width: 140px;">ลูกค้า</td>
-                <td style="padding: 6px 0; color: #14532D; font-weight: bold;">คุณ\${app.clientName} (\${app.clientCompany})</td>
+                <td style="padding: 6px 0; color: #14532D; font-weight: bold;">คุณ${app.clientName} (${app.clientCompany})</td>
               </tr>
               <tr style="border-bottom: 1px dashed #BBF7D0;">
                 <td style="padding: 6px 0; color: #64748B;">เลขอ้างอิง</td>
-                <td style="padding: 6px 0; color: #1E293B; font-weight: bold;">\${app.refCode}</td>
+                <td style="padding: 6px 0; color: #1E293B; font-weight: bold;">${app.refCode}</td>
               </tr>
               <tr style="border-bottom: 1px dashed #BBF7D0;">
                 <td style="padding: 6px 0; color: #64748B;">ผู้บริหาร</td>
-                <td style="padding: 6px 0; color: #1E293B;">\${app.executiveHost}</td>
+                <td style="padding: 6px 0; color: #1E293B;">${app.executiveHost}</td>
               </tr>
               <tr style="border-bottom: 1px dashed #BBF7D0;">
                 <td style="padding: 6px 0; color: #166534; font-weight: bold;">วันที่ยืนยันเลื่อน</td>
-                <td style="padding: 6px 0; color: #14532D; font-weight: bold;">\${dateDisplay}</td>
+                <td style="padding: 6px 0; color: #14532D; font-weight: bold;">${dateDisplay}</td>
               </tr>
               <tr>
                 <td style="padding: 6px 0; color: #166534; font-weight: bold;">เวลาที่ยืนยันเลื่อน</td>
-                <td style="padding: 6px 0; color: #14532D; font-weight: bold;">\${timeDisplay}</td>
+                <td style="padding: 6px 0; color: #14532D; font-weight: bold;">${timeDisplay}</td>
               </tr>
             </table>
           </div>
           <div style="text-align: center;">
-            <a href="\${adminLink}" target="_blank" style="display: inline-block; background-color: #10B981; color: #FFFFFF; font-size: 14px; font-weight: 600; text-decoration: none; padding: 12px 24px; border-radius: 8px;">
+            <a href="${adminLink}" target="_blank" style="display: inline-block; background-color: #10B981; color: #FFFFFF; font-size: 14px; font-weight: 600; text-decoration: none; padding: 12px 24px; border-radius: 8px;">
               &#128187; เปิดระบบ Admin เพื่อตรวจสอบรายละเอียด →
             </a>
           </div>
         </div>
-        \${getFooterHtml()}
+        ${getFooterHtml()}
       </div>
     </div>
   `;
