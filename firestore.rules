@@ -15,43 +15,48 @@ service cloud.firestore {
     // 1. Appointments collection
     match /appointments/{appointmentId} {
       
-      // ทุกคน: READ ได้เฉพาะ document ที่ refCode ตรงกัน (Admin อ่านได้หมด)
       allow get: if isSignedIn() || (resource != null && resource.data.refCode == appointmentId);
       allow list: if isSignedIn() || (request.query.filters.refCode != null);
       
-      // ทุกคน: CREATE ได้ (ขอนัดหมายใหม่)
       allow create: if true;
       
-      // ทุกคน: UPDATE ได้เฉพาะ fields: status, selectedSlot, updatedAt, rescheduleReason, cancellationReason, requestedNewDate, requestedNewStartTime, requestedNewEndTime, requestedNewTimeSlot
-      // โดย status เปลี่ยนได้เฉพาะเป็น client_selected, cancellation_requested หรือ reschedule_requested เท่านั้น
-      // Admin: UPDATE ได้ทั้งหมด
+      // ลูกค้า (ไม่ login): อัปเดตได้เฉพาะ field ที่เกี่ยวข้องกับ 
+      // การเลือกคิว / ขอเลื่อน / ขอยกเลิก / บันทึก timeline เท่านั้น
+      // Admin (login แล้ว): แก้ไขได้ทุก field
       allow update: if isSignedIn() || (
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'selectedSlot', 'updatedAt', 'rescheduleReason', 'cancellationReason', 'requestedNewDate', 'requestedNewStartTime', 'requestedNewEndTime', 'requestedNewTimeSlot'])
-        && request.resource.data.status in ['client_selected', 'cancellation_requested', 'reschedule_requested']
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status', 'selectedSlot', 'updatedAt', 
+          'rescheduleReason', 'cancellationReason', 
+          'requestedNewDate', 'requestedNewStartTime', 'requestedNewEndTime', 'requestedNewTimeSlot',
+          'timeline',
+          'rescheduleType', 'rescheduleContext', 
+          'proposedRescheduleDates', 'rescheduleRangeDateFrom', 'rescheduleRangeDateTo',
+          'confirmedDate', 'confirmedTime', 'date', 'timeSlot',
+          'adminNotes', 'clientSelectedAt', 'cancellationRequestedAt'
+        ])
+        && (
+          !('status' in request.resource.data.diff(resource.data).affectedKeys())
+          || request.resource.data.status in [
+            'client_selected', 'cancellation_requested', 'reschedule_requested', 'confirmed_reschedule'
+          ]
+        )
       );
       
-      // Admin: DELETE ได้ทั้งหมด
       allow delete: if isSignedIn();
     }
     
     // 2. Executive Slots collection
     match /executive_slots/{slotId} {
-      // Admin: READ/WRITE ทั้งหมด
-      // Guest: ไม่มีสิทธิ์เลย
       allow read, write: if isSignedIn();
     }
     
-    // 3. Config collection (สำหรับเก็บ webhook URL)
+    // 3. Config collection
     match /config/{configId} {
-      // Admin: READ/WRITE ทั้งหมด
-      // Guest: ไม่มีสิทธิ์เลย
       allow read, write: if isSignedIn();
     }
 
-    // Settings collection (รักษาความเข้ากันได้ย้อนหลังกับระบบ config)
+    // Settings collection
     match /settings/{settingId} {
-      // Admin: READ/WRITE ทั้งหมด
-      // Guest: ไม่มีสิทธิ์เลย
       allow read, write: if isSignedIn();
     }
   }

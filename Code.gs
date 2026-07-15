@@ -12,9 +12,9 @@
 // 1. CONFIGURATION
 // ==========================================
 const CALENDAR_ID = 'primary';
-const FIRESTORE_PROJECT_ID = 'ai-studio-a5bd4c57-fd53-487d-a656-60525d934d1b';
+const FIRESTORE_PROJECT_ID = 'executive-appointment-system';
 const ADMIN_EMAIL = 'putcharawun.k@bu.ac.th';
-const FRONTEND_BASE_URL = 'https://ais-dev-4sbo3bax2zhybk2udai3cm-241766677434.asia-east1.run.app';
+const FRONTEND_BASE_URL = 'https://chimerical-mandazi-f22a66.netlify.app';
 
 // เพิ่มตัวแปร global ไว้บนสุดของไฟล์ (ใต้ CONFIGURATION)
 var lastEmailThreadId = null;
