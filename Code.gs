@@ -1251,6 +1251,41 @@ function getRescheduleEmailTemplate(app, oldDate, oldTime, newDate, newTime, not
             </a>
           </div>
 
+          <div style="margin-top:20px; padding:20px 24px; 
+                      background:#F8FAFC; border:1px solid #E2E8F0; 
+                      border-radius:10px; text-align:center; margin-bottom: 24px;">
+            <p style="color:#64748B; font-size:12px; font-weight:600;
+                      margin:0 0 4px; letter-spacing:0.05em;">
+              หากคิวที่เสนอใหม่นี้ยังไม่สะดวก
+            </p>
+            <p style="color:#94A3B8; font-size:11px; margin:0 0 16px;">
+              ท่านสามารถขอเลื่อนวันนัดหมายอีกครั้ง หรือยกเลิกนัดหมายได้
+            </p>
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="center" style="padding:0 6px 0 0; width:50%;">
+                  <a href="${statusLink}&action=reschedule_request"
+                     style="display:block; background:#3B82F6; color:#ffffff; 
+                            padding:12px 16px; border-radius:8px; 
+                            text-decoration:none; font-size:13px; font-weight:600; text-align:center;">
+                    📅 ขอเลื่อนวันนัดหมายอีกครั้ง
+                  </a>
+                </td>
+                <td align="center" style="padding:0 0 0 6px; width:50%;">
+                  <a href="${statusLink}&action=cancel_request"
+                     style="display:block; background:#EF4444; color:#ffffff; 
+                            padding:12px 16px; border-radius:8px; 
+                            text-decoration:none; font-size:13px; font-weight:600; text-align:center;">
+                    ✖ ส่งคำขอยกเลิกนัดหมาย
+                  </a>
+                </td>
+              </tr>
+            </table>
+            <p style="color:#94A3B8; font-size:11px; margin:12px 0 0;">
+              * เมื่อคลิกปุ่มจะไปยังหน้ายืนยันเพื่อดำเนินการต่อ
+            </p>
+          </div>
+
           ${getOperationHistoryTimelineHtml(app)}
         </div>
         ${getFooterHtml()}

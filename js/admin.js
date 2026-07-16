@@ -1716,6 +1716,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updatedAt: new Date().toISOString()
       };
 
+      let slotsToSave = [];
+
       if (updatedStatus === 'approved') {
         updates.approvedAt = new Date().toISOString();
       } else if (updatedStatus === 'rescheduled') {
@@ -1836,7 +1838,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // --- OFFER SLOTS ---
       } else if (updatedStatus === 'pending_client_selection') {
-        const slotsToSave = [];
+        slotsToSave = [];
 
         const validateAndGetSlot = (d, s, e, idxName) => {
           if (!d?.value && !s?.value && !e?.value) return null;

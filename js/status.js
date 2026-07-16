@@ -984,18 +984,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
               // 2. updateAppointment in Firestore
               await dbManager.updateAppointment(app.refCode, {
-                status: 'confirmed_reschedule',
+                status: 'client_selected',
                 confirmedDate: slotDate,
                 confirmedTime: slotTime,
                 date: slotDate,
                 timeSlot: slotTime,
-                adminNotes: (app.adminNotes || '') + `\n(หมายเหตุ: ลูกค้าได้ตกลงปรับเปลี่ยนเวลานัดหมายใหม่เป็นวันที่ ${formatDate(slotDate)} เวลา ${slotTime} น. เรียบร้อยแล้ว)`
+                clientSelectedAt: new Date().toISOString(),
+                adminNotes: (app.adminNotes || '') + `\n(หมายเหตุ: ลูกค้าได้ตกลงปรับเปลี่ยนเวลานัดหมายใหม่เป็นวันที่ ${formatDate(slotDate)} เวลา ${slotTime} น. รอการยืนยันขั้นสุดท้ายจากเลขาฯ)`
               });
 
               await dbManager.appendTimelineEvent(app.refCode, {
                 action: "confirmed_reschedule",
                 label: "ลูกค้าตอบรับเวลาใหม่",
-                detail: `ตอบรับคิวเสนอใหม่: วันที่ ${formatDate(slotDate)} เวลา ${slotTime} น.`,
+                detail: `ตอบรับคิวเสนอใหม่: วันที่ ${formatDate(slotDate)} เวลา ${slotTime} น. (รอเลขาฯ ยืนยันขั้นสุดท้าย)`,
                 by: "client",
                 timestamp: new Date().toISOString()
               });
@@ -1010,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 timeSlot: slotTime
               });
 
-              alert('ตอบรับกำหนดเวลาเข้าพบใหม่เรียบร้อยแล้วค่ะ!');
+              alert('ตอบรับกำหนดเวลาเข้าพบใหม่เรียบร้อยแล้วค่ะ! กรุณารอเลขานุการยืนยันขั้นสุดท้ายอีกครั้งทางอีเมล');
               fetchAndRenderStatus(app.refCode);
             } catch (error) {
               alert('ระบบขัดข้อง: ' + error.message);
