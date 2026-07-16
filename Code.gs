@@ -29,6 +29,39 @@ function getAdminEmail(appData) {
   return 'putcharawun.k@bu.ac.th';
 }
 
+function logToDebugSheet(action, appData, status, errorMsg) {
+  try {
+    const DEFAULT_SHEET_ID = '1bAvdj97kmsQx9pnVHbDTsp03mX0MSy7sFFM21IMmfcs'; 
+    let ss;
+    const props = PropertiesService.getScriptProperties();
+    let sheetId = props.getProperty('DEBUG_SHEET_ID') || DEFAULT_SHEET_ID;
+    
+    try {
+      ss = SpreadsheetApp.openById(sheetId);
+    } catch (openErr) {
+      // หากเปิดด้วย ID เดิมไม่ได้ หรือไม่มีสิทธิ์ ให้สร้างขึ้นใหม่ใน Drive ของผู้ใช้
+      ss = SpreadsheetApp.create('GAS Webhook Debug Log');
+      sheetId = ss.getId();
+      props.setProperty('DEBUG_SHEET_ID', sheetId);
+      const sheet = ss.getSheets()[0];
+      sheet.appendRow(['Timestamp', 'Action', 'RefCode', 'Status', 'Error', 'Full Payload JSON']);
+      console.log('Created new Debug Log Google Sheet with ID: ' + sheetId);
+    }
+    
+    const sheet = ss.getSheets()[0];
+    sheet.appendRow([
+      new Date().toISOString(),
+      action || '-',
+      (appData && appData.refCode) || '-',
+      status || '-',
+      errorMsg || '',
+      JSON.stringify(appData || {})
+    ]);
+  } catch (logErr) {
+    console.error("Failed to write debug log: " + logErr.message);
+  }
+}
+
 // ==========================================
 // 2. ENTRY POINT FOR HTTP GET
 // ==========================================
@@ -77,6 +110,8 @@ function doPost(e) {
   lastEmailThreadId = null;
   lastEmailMessageId = null;
   const result = { success: false, message: '' };
+  let action = null;
+  let appData = null;
   
   try {
     if (!e || !e.postData || !e.postData.contents) {
@@ -84,14 +119,16 @@ function doPost(e) {
     }
     
     const payload = JSON.parse(e.postData.contents);
-    const action = payload.action;
-    const appData = payload.appointmentData;
+    action = payload.action;
+    appData = payload.appointmentData;
     
     if (!action || !appData) {
       throw new Error("พารามิเตอร์ไม่สมบูรณ์ (ต้องประกอบด้วย 'action' และ 'appointmentData')");
     }
     
     console.log("ได้รับคำขอดำเนินการ Action: " + action + " สำหรับรหัสจองคิว: " + appData.refCode);
+    
+    logToDebugSheet(action, appData, 'RECEIVED', null);
     
     switch (action.toLowerCase()) {
       case 'approve':
@@ -139,10 +176,13 @@ function doPost(e) {
         throw new Error("ไม่พบ Action ประเภทที่ระบุ: " + action);
     }
     
+    logToDebugSheet(action, appData, result.success ? 'SUCCESS' : 'FAILED', result.message);
+    
   } catch (err) {
     console.error("เกิดข้อผิดพลาดในการรัน Webhook: " + err.message);
     result.success = false;
     result.message = err.message;
+    logToDebugSheet(action, appData, 'ERROR', err.message);
   }
   
   result.emailThreadId = lastEmailThreadId;
@@ -580,23 +620,6 @@ function createSingleSlotEvent(appData, dateStr, timeStr, titlePrefix, colorId) 
       setEventColor(event, colorId);
     }
     
-    // เพิ่มลูกค้าเป็น guest
-    try {
-      const guestEmail = appData.clientEmail || appData.email;
-      if (guestEmail) event.addGuest(guestEmail);
-    } catch (e) {
-      console.warn("ไม่สามารถเพิ่ม guest: " + e.message);
-    }
-    
-    // เพิ่มผู้เข้าร่วมเสริม
-    if (appData.additionalAttendees && appData.additionalAttendees.length > 0) {
-      appData.additionalAttendees.forEach(att => {
-        if (att.email) {
-          try { event.addGuest(att.email); } catch (e) {}
-        }
-      });
-    }
-    
     const newEventId = event.getId();
     console.log("สร้าง Slot Calendar event สำเร็จ ID: " + newEventId);
     return newEventId;
@@ -723,23 +746,6 @@ function createCalendarEvent(appData) {
       description: details,
       location: appData.meetingLocation || ''
     });
-    
-    // เพิ่มลูกค้าเป็น guest
-    try {
-      const guestEmail = appData.clientEmail || appData.email;
-      if (guestEmail) event.addGuest(guestEmail);
-    } catch (e) {
-      console.warn("ไม่สามารถเพิ่ม guest: " + e.message);
-    }
-    
-    // เพิ่มผู้เข้าร่วมเสริม
-    if (appData.additionalAttendees && appData.additionalAttendees.length > 0) {
-      appData.additionalAttendees.forEach(att => {
-        if (att.email) {
-          try { event.addGuest(att.email); } catch (e) {}
-        }
-      });
-    }
     
     const newEventId = event.getId();
     console.log("สร้าง Calendar event สำเร็จ ID: " + newEventId);

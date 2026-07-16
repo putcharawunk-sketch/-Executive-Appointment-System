@@ -735,7 +735,7 @@ document.addEventListener('DOMContentLoaded', () => {
         timeOptionHtml = `
           <div>
             <span class="text-xs text-gray-400 block">รูปแบบช่วงเวลาที่จอง</span>
-            <span class="font-medium text-sm text-gray-900">Option A: ระบุเวลาเข้าพบจำนวน ${app.optionAHours || '-'} ชั่วโมง เพื่อให้เจ้านัดหมาย</span>
+            <span class="font-medium text-sm text-gray-900">Option A: ระบุเวลาเข้าพบจำนวน ${app.optionAHours || '-'} ชั่วโมง เพื่อทำการนัดหมาย</span>
           </div>
         `;
       } else {
