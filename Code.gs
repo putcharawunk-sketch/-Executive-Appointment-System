@@ -1056,46 +1056,72 @@ function formatTimelineTimestamp(isoString) {
 }
 
 function getOperationHistoryTimelineHtml(app) {
-  if (!app) return '';
-  
-  const events = [];
-  
-  function addEvent(timestamp, text) {
-    if (timestamp) {
-      const formatted = formatTimelineTimestamp(timestamp);
-      if (formatted) {
-        events.push({ time: formatted, rawTime: new Date(timestamp).getTime(), text: text });
-      }
-    }
+  if (!app || !app.timeline || !Array.isArray(app.timeline) || app.timeline.length === 0) {
+    return '';
   }
-  
-  addEvent(app.createdAt, 'สร้างคำร้องขอเข้าพบ');
-  addEvent(app.proposedAt, 'เลขาฯ เสนอตัวเลือกคิว');
-  addEvent(app.clientSelectedAt, 'ลูกค้าเลือกคิวที่สะดวก');
-  addEvent(app.rescheduledAt, 'เลขาฯ เสนอขอเปลี่ยนกำหนดเวลาใหม่');
-  addEvent(app.approvedAt, 'เลขาฯ อนุมัติการเข้าพบและลงตาราง');
-  addEvent(app.rejectedAt, 'คำขอนัดหมายไม่ผ่านการอนุมัติ');
-  addEvent(app.cancellationRequestedAt, 'ลูกค้าส่งคำขอยกเลิกนัดหมาย');
-  addEvent(app.cancelledAt, 'ยกเลิกนัดหมายสำเร็จ');
-  
-  if (events.length === 0) return '';
-  
-  events.sort((a, b) => a.rawTime - b.rawTime);
-  
+
+  const actionIcons = {
+    'created': '&#9997;',
+    'pending_client_selection': '&#9993;',
+    'client_selected': '&#127919;',
+    'rescheduled': '&#8987;',
+    'reschedule_requested': '&#128260;',
+    'confirmed_reschedule': '&#129309;',
+    'cancellation_requested': '&#9888;',
+    'cancelled': '&#128683;',
+    'rejected': '&#10060;',
+    'approved': '&#9989;',
+    'updated': '&#128295;'
+  };
+
+  const timelineList = [...app.timeline].sort((a, b) => {
+    const tA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+    const tB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+    return tA - tB;
+  });
+
   let timelineLines = '';
-  events.forEach(evt => {
+  timelineList.forEach(item => {
+    const icon = actionIcons[item.action] || '&#128295;';
+    const formattedTime = formatTimelineTimestamp(item.timestamp) || '-';
+
+    let byLabel = 'ระบบ';
+    if (item.by === 'client') {
+      byLabel = 'ลูกค้า';
+    } else if (item.by === 'admin') {
+      byLabel = 'เลขานุการ';
+    }
+
+    const label = item.label || '';
+
+    let detailHtml = '';
+    if (item.detail && String(item.detail).trim() !== '') {
+      const safeDetail = String(item.detail)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;")
+        .replace(/\n/g, '<br>');
+      detailHtml = `<div style="margin-top: 4px; padding-left: 12px; font-size: 12.5px; color: #64748B; border-left: 2px solid #CBD5E1; line-height: 1.5;">${safeDetail}</div>`;
+    }
+
     timelineLines += `
-      <div style="margin-bottom: 8px; font-size: 13px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; color: #475569;">
-        <span style="font-family: monospace; color: #64748B; font-weight: bold; margin-right: 8px;">[${evt.time}]</span>
-        <span style="color: #1E293B;">${evt.text}</span>
+      <div style="margin-bottom: 12px; font-size: 13px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; color: #475569;">
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
+          <span style="font-family: monospace; color: #64748B; font-weight: bold;">[${formattedTime}]</span>
+          <span style="display: inline-block; padding: 2px 8px; background-color: #E2E8F0; color: #334155; border-radius: 4px; font-size: 11px; font-weight: 600;">${byLabel}</span>
+          <span style="color: #1E293B; font-weight: 600;">${icon} ${label}</span>
+        </div>
+        ${detailHtml}
       </div>
     `;
   });
-  
+
   return `
     <div style="margin-top: 24px; margin-bottom: 24px; padding: 18px 20px; background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px;">
       <h4 style="margin: 0 0 12px 0; font-size: 13px; font-weight: 700; color: #475569; border-bottom: 1px solid #E2E8F0; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">
-        &#128197; ประวัติการดำเนินการ (${app.refCode})
+        &#128197; ประวัติการดำเนินการ (${app.refCode || ''})
       </h4>
       <div style="line-height: 1.6;">
         ${timelineLines}
@@ -1213,6 +1239,17 @@ function getApprovalEmailTemplate(app, dateStr, timeStr, locationStr, googleCalL
 }
 
 function getRescheduleEmailTemplate(app, oldDate, oldTime, newDate, newTime, noteText, statusLink) {
+  const hasValidOldDate = oldDate && oldDate.trim() !== '' && oldDate.trim() !== '-';
+  const cleanedOldTime = (oldTime || '').replace(/น\./g, '').trim();
+  const hasValidOldTime = cleanedOldTime !== '' && cleanedOldTime !== '-';
+  const hasValidOld = hasValidOldDate && hasValidOldTime;
+
+  const oldRowHtml = hasValidOld ? `
+              <tr style="border-bottom: 1px dashed #BFDBFE;">
+                <td style="padding: 8px 0; color: #64748B; width: 140px;">เวลาเดิม</td>
+                <td style="padding: 8px 0; color: #475569; text-decoration: line-through;">${oldDate} เวลา ${oldTime}</td>
+              </tr>` : '';
+
   return `
     <div style="background-color: #F1F5F9; padding: 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
       <div style="max-width: 600px; margin: 0 auto; background-color: #FFFFFF; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #E2E8F0;">
@@ -1227,13 +1264,9 @@ function getRescheduleEmailTemplate(app, oldDate, oldTime, newDate, newTime, not
             ฝ่ายเลขานุการขออภัยเป็นอย่างยิ่ง และขอเสนอปรับเวลาเข้าพบใหม่ดังนี้:
           </p>
           <div style="background-color: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-              <tr style="border-bottom: 1px dashed #BFDBFE;">
-                <td style="padding: 8px 0; color: #64748B; width: 140px;">เวลาเดิม</td>
-                <td style="padding: 8px 0; color: #475569; text-decoration: line-through;">${oldDate} เวลา ${oldTime}</td>
-              </tr>
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">${oldRowHtml}
               <tr>
-                <td style="padding: 8px 0; color: #1E3A8A; font-weight: bold;">เวลาใหม่ที่เสนอ</td>
+                <td style="padding: 8px 0; color: #1E3A8A; font-weight: bold; width: 140px;">เวลาใหม่ที่เสนอ</td>
                 <td style="padding: 8px 0; color: #1E3A8A; font-weight: bold; font-size: 15px;">&#10024; ${newDate} เวลา ${newTime}</td>
               </tr>
             </table>
@@ -1268,7 +1301,7 @@ function getRescheduleEmailTemplate(app, oldDate, oldTime, newDate, newTime, not
                      style="display:block; background:#3B82F6; color:#ffffff; 
                             padding:12px 16px; border-radius:8px; 
                             text-decoration:none; font-size:13px; font-weight:600; text-align:center;">
-                    📅 ขอเลื่อนวันนัดหมายอีกครั้ง
+                    &#128197; ขอเลื่อนวันนัดหมายอีกครั้ง
                   </a>
                 </td>
                 <td align="center" style="padding:0 0 0 6px; width:50%;">
@@ -1276,7 +1309,7 @@ function getRescheduleEmailTemplate(app, oldDate, oldTime, newDate, newTime, not
                      style="display:block; background:#EF4444; color:#ffffff; 
                             padding:12px 16px; border-radius:8px; 
                             text-decoration:none; font-size:13px; font-weight:600; text-align:center;">
-                    ✖ ส่งคำขอยกเลิกนัดหมาย
+                    &#10006; ส่งคำขอยกเลิกนัดหมาย
                   </a>
                 </td>
               </tr>
@@ -1683,7 +1716,7 @@ function getAdminNewBookingNotificationTemplate(app, adminLink) {
     attendeesHtml = `
       <div style="margin-top: 16px; padding: 12px; background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px;">
         <span style="font-size: 11px; font-weight: bold; color: #64748B; text-transform: uppercase; display: block; margin-bottom: 6px;">
-          👥 ผู้เข้าร่วมประชุมเพิ่มเติม (${attendeesList.length} ท่าน)
+          &#128101; ผู้เข้าร่วมประชุมเพิ่มเติม (${attendeesList.length} ท่าน)
         </span>
         <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #475569;">
           ${lines}

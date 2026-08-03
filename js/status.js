@@ -400,6 +400,8 @@ document.addEventListener('DOMContentLoaded', () => {
               updatedAt: new Date().toISOString()
             };
 
+            let datesToSave = [];
+
             if (isPendingSelection) {
               updateData.rescheduleContext = 'from_offer_slots';
             }
@@ -418,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
               }
  
               // Parse list, ensure dates are filled if specified
-              const datesToSave = [];
+              datesToSave = [];
               for (let i = 0; i < proposedRescheduleSlots.length; i++) {
                 const slot = proposedRescheduleSlots[i];
                 if (i > 0 && !slot.date) {
@@ -474,9 +476,28 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
               await dbManager.updateAppointment(app.refCode, updateData);
  
-              const detailText = isPendingSelection
+              const baseText = isPendingSelection
                 ? `ขอให้จัดสรรคิวใหม่: ${reason || "ลูกค้าไม่สะดวกคิวที่เสนอ"}`
                 : `ขอเลื่อนนัดหมาย: ${reason || ""}`;
+
+              let detailText = baseText;
+              if (selectedType === 'specific_dates') {
+                let dateDetails = 'เสนอวันที่ใหม่:';
+                datesToSave.forEach(slot => {
+                  const timeText = (slot.startTime && slot.endTime)
+                    ? `เวลา ${slot.startTime}-${slot.endTime} น.`
+                    : `(ยังไม่ระบุเวลา)`;
+                  dateDetails += `\n  • ${formatDate(slot.date)} ${timeText}`;
+                });
+                detailText += `\n${dateDetails}`;
+              } else {
+                const fromVal = rangeFromInput ? rangeFromInput.value : '';
+                const toVal = rangeToInput ? rangeToInput.value : '';
+                const rangeText = toVal 
+                  ? `${formatDate(fromVal)} ถึง ${formatDate(toVal)}`
+                  : `${formatDate(fromVal)} ถึง -`;
+                detailText += `\nเสนอช่วงวันที่: ${rangeText}`;
+              }
 
               await dbManager.appendTimelineEvent(app.refCode, {
                 action: "reschedule_requested",
