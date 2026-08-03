@@ -5,6 +5,32 @@
 import { dbManager } from './firebase-config.js';
 import { formatDate, statusLabel, EXECUTIVE_HOSTS } from './utils.js';
 
+function buildCurrentQueueDisplayText(app) {
+  // 1. ถ้ามีวันเวลาที่ยืนยัน/อนุมัติแล้วจริง
+  if (app.confirmedDate && app.confirmedTime) {
+    return `${formatDate(app.confirmedDate)} เวลา ${app.confirmedTime} น. (ยืนยันแล้ว)`;
+  }
+  // 2. ถ้าเป็น client_pick และมีวันที่ลูกค้าเคยเสนอ
+  if (app.date && app.timeSlot && app.timeSlot !== 'TBD') {
+    return `${formatDate(app.date)} เวลา ${app.timeSlot} น. (ที่เคยเสนอ)`;
+  }
+  if (app.date) {
+    return `${formatDate(app.date)} (ยังไม่ระบุเวลา)`;
+  }
+  // 3. ถ้าเป็น secretary_allocate ที่ยังไม่มีคิวจริง
+  if (app.bookingType === 'secretary_allocate') {
+    const hours = app.optionAHours || app.optionHours || '1 ชั่วโมง';
+    const count = app.slotCount || 1;
+    let rangeText = 'ไม่จำกัดช่วงเวลา';
+    if (app.preferredDateFrom || app.preferredDateTo) {
+      rangeText = `${app.preferredDateFrom ? formatDate(app.preferredDateFrom) : 'ไม่จำกัด'} ถึง ${app.preferredDateTo ? formatDate(app.preferredDateTo) : 'ไม่จำกัด'}`;
+    }
+    return `รอเลขาฯ จัดสรรคิว (ต้องการ ${count} คิว, ${hours}, ช่วงวันที่สะดวก: ${rangeText})`;
+  }
+  // 4. Fallback
+  return 'ยังไม่มีการยืนยันวันเวลา';
+}
+
 // GAS Notification Dispatcher
 async function sendGasNotification(action, appointmentData) {
   let webhookUrl = '';
@@ -218,9 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rescheduleModal) {
           const currentDisp = document.getElementById('reschedule_current_time_disp');
           if (currentDisp) {
-            const confirmedDate = app.confirmedDate || app.date || '-';
-            const confirmedTime = app.confirmedTime || app.timeSlot || '-';
-            currentDisp.textContent = `${formatDate(confirmedDate)} ${confirmedTime} น.`;
+            currentDisp.textContent = buildCurrentQueueDisplayText(app);
           }
           
           const titleEl = document.getElementById('reschedule_modal_title');
