@@ -17,7 +17,13 @@ function buildCurrentQueueDisplayText(app) {
   if (app.date) {
     return `${formatDate(app.date)} (ยังไม่ระบุเวลา)`;
   }
-  // 3. ใหม่: ถ้าเลขาฯ เสนอคิวให้เลือกแล้ว (pending_client_selection) 
+  // 3. ใหม่: ถ้าผู้บริหาร/เลขาฯ เสนอเปลี่ยนกำหนดเวลาใหม่แล้ว (rescheduled)
+  //    รอลูกค้ายืนยันหรือปฏิเสธ
+  if (app.status === 'rescheduled' && app.rescheduledDate) {
+    const timeStr = app.rescheduledTime ? `เวลา ${app.rescheduledTime} น.` : '(ยังไม่ระบุเวลา)';
+    return `เลขาฯ เสนอเปลี่ยนกำหนดเวลาใหม่ (รอท่านยืนยัน): ${formatDate(app.rescheduledDate)} ${timeStr}`;
+  }
+  // 4. ถ้าเลขาฯ เสนอคิวให้เลือกแล้ว (pending_client_selection) 
   //    และมี proposedSlots ให้แสดงคิวที่เสนอจริงทั้งหมด
   if (app.status === 'pending_client_selection' && app.proposedSlots && app.proposedSlots.length > 0) {
     const slotsText = app.proposedSlots.map((s, i) => {
@@ -26,7 +32,7 @@ function buildCurrentQueueDisplayText(app) {
     }).join('\n');
     return `เลขาฯ เสนอคิวให้เลือกแล้ว (ยังไม่ได้เลือก):\n${slotsText}`;
   }
-  // 4. ถ้าเป็น secretary_allocate ที่ยังไม่มีใครเสนอคิวเลย
+  // 5. ถ้าเป็น secretary_allocate ที่ยังไม่มีใครเสนอคิวเลย
   if (app.bookingType === 'secretary_allocate') {
     const hours = app.optionAHours || app.optionHours || '1 ชั่วโมง';
     const count = app.slotCount || 1;
@@ -36,7 +42,7 @@ function buildCurrentQueueDisplayText(app) {
     }
     return `รอเลขาฯ จัดสรรคิว (ต้องการ ${count} คิว, ${hours}, ช่วงวันที่สะดวก: ${rangeText})`;
   }
-  // 5. Fallback
+  // 6. Fallback
   return 'ยังไม่มีการยืนยันวันเวลา';
 }
 
