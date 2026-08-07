@@ -12,8 +12,13 @@
           extend: {
             colors: {
               primary: '#0F172A',
-              secondary: '#1E293B',
-              accent: '#F59E0B',
+              cream: '#FAF8F3',
+              borderCream: '#E8E2D4',
+              gold: '#D97706',
+              coral: '#D85A30',
+              grayDark: '#5F5E5A',
+              grayMuted: '#B4B2A9',
+              creamDark: '#F1EFE8'
             }
           }
         }
@@ -23,51 +28,50 @@
     <link rel="stylesheet" href="/css/custom.css" />
     <style>
       body {
-        background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+        background-color: #FAF8F3;
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
         font-size: 14px;
-        color: #CBD5E1;
+        color: #0F172A;
         line-height: 1.6;
       }
-      .glass-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+      .card-executive-box {
+        background: #FFFFFF;
+        border: 1px solid #E8E2D4;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
       }
       
       /* Typography Styles */
       .form-label {
         font-size: 13px !important;
         font-weight: 600 !important;
-        color: #94A3B8 !important;
-        letter-spacing: 0.05em !important;
-        text-transform: uppercase !important;
+        color: #5F5E5A !important;
+        letter-spacing: 0.01em !important;
         margin-bottom: 6px !important;
         display: block;
       }
       .summary-label {
         font-size: 11px !important;
         font-weight: 600 !important;
-        color: #64748B !important;
+        color: #5F5E5A !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.08em !important;
+        letter-spacing: 0.05em !important;
         margin-bottom: 4px !important;
         display: block !important;
       }
       .summary-value {
         font-size: 14px !important;
-        color: #F1F5F9 !important;
+        color: #0F172A !important;
+        font-weight: 500 !important;
         margin-bottom: 12px !important;
       }
       input[type="time"] {
         max-width: 140px !important;
       }
       .gold-accent-header {
-        font-size: 18px !important;
-        font-weight: 700 !important;
-        color: #F8FAFC !important;
-        border-left: 3px solid #F59E0B !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: #0F172A !important;
+        border-left: 3px solid #D97706 !important;
         padding-left: 12px !important;
         text-transform: none !important;
         letter-spacing: normal !important;
@@ -75,59 +79,62 @@
 
       /* Input Fields */
       .luxury-input {
-        background: #1E293B !important;
-        border: 1.5px solid rgba(255,255,255,0.15) !important;
+        background: #FFFFFF !important;
+        border: 1px solid #E8E2D4 !important;
         border-radius: 8px !important;
-        padding: 12px 16px !important;
-        font-size: 15px !important;
-        color: #F1F5F9 !important;
+        padding: 11px 14px !important;
+        font-size: 14px !important;
+        color: #0F172A !important;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02) !important;
         transition: border-color 0.2s, box-shadow 0.2s !important;
       }
       .luxury-input:focus {
-        border-color: #F59E0B !important;
-        box-shadow: 0 0 0 3px rgba(245,158,11,0.15) !important;
+        border-color: #D97706 !important;
+        box-shadow: 0 0 0 3px rgba(217,119,6,0.12) !important;
         outline: none !important;
       }
       .luxury-input::placeholder {
-        color: #475569 !important;
+        color: #B4B2A9 !important;
       }
 
       /* Executive Cards */
       .executive-card {
-        background: rgba(255,255,255,0.04) !important;
-        border: 1.5px solid rgba(255,255,255,0.1) !important;
+        background: #FFFFFF !important;
+        border: 1px solid #E8E2D4 !important;
+        border-radius: 12px !important;
         opacity: 1 !important;
         transition: all 0.2s ease-in-out !important;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02) !important;
       }
       .executive-card:hover {
-        border-color: rgba(245,158,11,0.4) !important;
-        background: rgba(245,158,11,0.05) !important;
-        transform: translateY(-2px) !important;
+        border-color: #D97706 !important;
+        background: #FAF8F3 !important;
+        transform: translateY(-1px) !important;
       }
       .executive-card.selected {
-        border: 2px solid #F59E0B !important;
-        background: rgba(245,158,11,0.08) !important;
-        box-shadow: 0 0 0 4px rgba(245,158,11,0.1) !important;
+        border: 2px solid #D97706 !important;
+        background: #FAF8F3 !important;
+        box-shadow: 0 0 0 3px rgba(217,119,6,0.1) !important;
       }
       .executive-card-name {
         font-size: 14px !important;
         font-weight: 700 !important;
-        color: #F8FAFC !important;
+        color: #0F172A !important;
       }
       .executive-card-title {
-        font-size: 11px !important;
-        color: #94A3B8 !important;
+        font-size: 12px !important;
+        color: #5F5E5A !important;
         line-height: 1.4 !important;
       }
 
       /* Buttons */
       .btn-primary {
-        background: #F59E0B !important;
-        color: #0F172A !important;
-        font-weight: 700 !important;
-        font-size: 15px !important;
-        padding: 14px 32px !important;
-        border-radius: 10px !important;
+        background: #0F172A !important;
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        padding: 12px 28px !important;
+        border-radius: 8px !important;
         transition: all 0.2s ease-in-out !important;
         border: none !important;
         display: inline-flex;
@@ -136,7 +143,7 @@
         cursor: pointer !important;
       }
       .btn-primary:hover {
-        background: #D97706 !important;
+        background: #1E293B !important;
         transform: translateY(-1px) !important;
       }
       .btn-primary:active {
@@ -145,12 +152,12 @@
 
       .btn-secondary {
         background: transparent !important;
-        border: 1.5px solid rgba(255,255,255,0.2) !important;
-        color: #94A3B8 !important;
-        font-weight: 700 !important;
-        font-size: 15px !important;
-        padding: 14px 32px !important;
-        border-radius: 10px !important;
+        border: 1px solid #E8E2D4 !important;
+        color: #5F5E5A !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        padding: 12px 28px !important;
+        border-radius: 8px !important;
         transition: all 0.2s ease-in-out !important;
         display: inline-flex;
         align-items: center !important;
@@ -158,78 +165,81 @@
         cursor: pointer !important;
       }
       .btn-secondary:hover {
-        border-color: #F59E0B !important;
-        color: #F59E0B !important;
+        border-color: #D97706 !important;
+        color: #D97706 !important;
+        background: #FAF8F3 !important;
       }
       .hidden {
         display: none !important;
       }
     </style>
   </head>
-  <body class="text-slate-100 flex flex-col min-h-full">
+  <body class="bg-[#FAF8F3] text-[#0F172A] flex flex-col min-h-full">
     
     <!-- Top Minimalist Banner -->
-    <header id="header_ref" class="bg-slate-900/45 border-b border-slate-800/60 py-5 px-4 backdrop-blur">
+    <header id="header_ref" class="bg-[#0F172A] text-white py-5 px-4 relative shadow-md">
       <div class="max-w-4xl mx-auto flex justify-between items-center">
         <div class="flex items-center space-x-3">
-          <div class="h-8 w-1 bg-[#F59E0B]"></div>
+          <div class="h-8 w-1 bg-[#D97706] rounded-full"></div>
           <div>
             <h1 class="text-xs uppercase tracking-widest text-[#F59E0B] font-sans font-bold">Executive Suite</h1>
-            <p class="text-xs font-serif italic text-slate-400">Appointment Registry Portal</p>
+            <p class="text-xs font-serif italic text-slate-300">Appointment Registry Portal</p>
           </div>
         </div>
         <div class="flex space-x-4 text-xs font-semibold uppercase tracking-wider">
-          <a href="status.html" class="text-slate-300 hover:text-[#F59E0B] transition-colors">ตรวจสอบสถานะ</a>
-          <span class="text-slate-700">|</span>
-          <a href="admin.html" class="text-slate-300 hover:text-[#F59E0B] transition-colors">แอดมิน</a>
+          <a href="status.html" class="text-slate-200 hover:text-[#F59E0B] transition-colors">ตรวจสอบสถานะ</a>
+          <span class="text-slate-600">|</span>
+          <a href="admin.html" class="text-slate-200 hover:text-[#F59E0B] transition-colors">แอดมิน</a>
         </div>
       </div>
+      <!-- Thin gradient line underneath header -->
+      <div class="absolute bottom-0 left-0 right-0 h-[3px]" style="background: linear-gradient(90deg, #D97706 0%, #F59E0B 50%, #D97706 100%);"></div>
     </header>
 
     <!-- Main Content Stage -->
     <main class="flex-grow flex items-center justify-center p-4">
       
       <!-- Booking Form Card -->
-      <section id="view_booking" class="w-full max-w-2xl glass-card p-6 md:p-8 rounded-2xl shadow-2xl my-6">
+      <section id="view_booking" class="w-full max-w-2xl bg-white p-6 md:p-8 rounded-xl border border-[#E8E2D4] shadow-[0_1px_2px_rgba(15,23,42,0.03)] my-6">
         
         <div class="text-center mb-8">
-          <h2 class="text-2xl md:text-3xl font-bold text-slate-100 tracking-tight">ระบบบริหารจัดการนัดหมายผู้บริหาร</h2>
-          <div class="w-16 h-0.5 bg-[#F59E0B] mx-auto mt-3"></div>
-          <p class="text-[#94A3B8] text-[10px] mt-2.5 uppercase tracking-widest font-mono">Executive Booking</p>
+          <h2 class="text-2xl md:text-3xl font-bold text-[#0F172A] tracking-tight font-serif">ระบบบริหารจัดการนัดหมายผู้บริหาร</h2>
+          <div class="w-16 h-0.5 bg-[#D97706] mx-auto mt-3"></div>
+          <p class="text-[#8B8982] text-[11px] mt-2.5 uppercase tracking-[1px] font-mono font-semibold">EXECUTIVE BOOKING</p>
         </div>
 
         <!-- Progress Stepper Bar -->
         <div class="mb-10 select-none">
           <div class="flex items-center justify-between relative px-2">
             <!-- Background bar -->
-            <div class="absolute top-1/2 left-0 right-0 h-[2px] bg-slate-700/50 -translate-y-1/2 z-0"></div>
+            <div class="absolute top-1/2 left-0 right-0 h-[2px] bg-[#E8E2D4] -translate-y-1/2 z-0"></div>
             <!-- Active indicator bar -->
-            <div id="progress_bar_active" class="absolute top-1/2 left-0 h-[2px] bg-amber-500 -translate-y-1/2 transition-all duration-300 z-0" style="width: 0%;"></div>
+            <div id="progress_bar_active" class="absolute top-1/2 left-0 h-[2px] bg-[#D97706] -translate-y-1/2 transition-all duration-300 z-0" style="width: 0%;"></div>
             
             <!-- Step Indicators -->
             <div class="step-dot z-10 flex flex-col items-center cursor-pointer" data-step="1">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-amber-500 bg-slate-900 text-[#F59E0B] font-bold text-xs shadow-[0_0_10px_rgba(245,158,11,0.2)] transition-all duration-300" id="step_dot_1">1</div>
-              <span class="text-[9px] text-[#F59E0B] mt-2 font-semibold hidden md:block">ผู้ติดต่อ</span>
+              <div class="w-[26px] h-[26px] rounded-full flex items-center justify-center bg-[#D97706] text-white font-bold text-xs transition-all duration-300 shadow-sm" id="step_dot_1">1</div>
+              <span class="text-[9px] text-[#0F172A] mt-2 font-semibold hidden md:block">ผู้ติดต่อ</span>
             </div>
             <div class="step-dot z-10 flex flex-col items-center cursor-pointer" data-step="2">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-xs transition-all duration-300" id="step_dot_2">2</div>
-              <span class="text-[9px] text-slate-400 mt-2 font-medium hidden md:block">วาระ</span>
+              <div class="w-[26px] h-[26px] rounded-full flex items-center justify-center bg-[#F1EFE8] text-[#B4B2A9] font-bold text-xs transition-all duration-300" id="step_dot_2">2</div>
+              <span class="text-[9px] text-[#B4B2A9] mt-2 font-medium hidden md:block">วาระ</span>
             </div>
             <div class="step-dot z-10 flex flex-col items-center cursor-pointer" data-step="3">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-xs transition-all duration-300" id="step_dot_3">3</div>
-              <span class="text-[9px] text-slate-400 mt-2 font-medium hidden md:block">วันเวลา</span>
+              <div class="w-[26px] h-[26px] rounded-full flex items-center justify-center bg-[#F1EFE8] text-[#B4B2A9] font-bold text-xs transition-all duration-300" id="step_dot_3">3</div>
+              <span class="text-[9px] text-[#B4B2A9] mt-2 font-medium hidden md:block">วันเวลา</span>
             </div>
             <div class="step-dot z-10 flex flex-col items-center cursor-pointer" data-step="4">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-xs transition-all duration-300" id="step_dot_4">4</div>
-              <span class="text-[9px] text-slate-400 mt-2 font-medium hidden md:block">รูปแบบ</span>
+              <div class="w-[26px] h-[26px] rounded-full flex items-center justify-center bg-[#F1EFE8] text-[#B4B2A9] font-bold text-xs transition-all duration-300" id="step_dot_4">4</div>
+              <span class="text-[9px] text-[#B4B2A9] mt-2 font-medium hidden md:block">รูปแบบ</span>
             </div>
             <div class="step-dot z-10 flex flex-col items-center cursor-pointer" data-step="5">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-xs transition-all duration-300" id="step_dot_5">5</div>
-              <span class="text-[9px] text-slate-400 mt-2 font-medium hidden md:block">ผู้เข้าร่วม</span>
+              <div class="w-[26px] h-[26px] rounded-full flex items-center justify-center bg-[#F1EFE8] text-[#B4B2A9] font-bold text-xs transition-all duration-300" id="step_dot_5">5</div>
+              <span class="text-[9px] text-[#B4B2A9] mt-2 font-medium hidden md:block">ผู้เข้าร่วม</span>
             </div>
             <div class="step-dot z-10 flex flex-col items-center cursor-pointer" data-step="6">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-xs transition-all duration-300" id="step_dot_6">6</div>
-              <span class="text-[9px] text-slate-400 mt-2 font-medium hidden md:block">ยืนยัน</span>
+              <div class="w-[26px] h-[26px] rounded-full flex items-center justify-center bg-[#F1EFE8] text-[#B4B2A9] font-bold text-xs transition-all duration-300" id="step_dot_6">6</div>
+              <span class="text-[9px] text-[#B4B2A9] mt-2 font-medium hidden md:block">ยืนยัน</span>
             </div>
           </div>
         </div>
@@ -238,42 +248,42 @@
           
           <!-- STEP 1: Coordinator Profile -->
           <div id="form_step_1" class="space-y-5">
-            <h3 class="text-sm uppercase font-sans font-bold tracking-widest text-[#F59E0B] gold-accent-header mb-4">ขั้นตอนที่ 1: ข้อมูลผู้ประสานงาน / ผู้ขอเข้าพบ</h3>
+            <h3 class="text-sm font-sans font-semibold tracking-wide text-[#0F172A] gold-accent-header mb-4">ขั้นตอนที่ 1: ข้อมูลผู้ประสานงาน / ผู้ขอเข้าพบ</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="flex flex-col">
-                <label for="client_name" class="form-label">ชื่อ-นามสกุล <span class="text-red-400">*</span></label>
+                <label for="client_name" class="form-label">ชื่อ-นามสกุล <span class="text-[#D85A30]">*</span></label>
                 <input type="text" id="client_name" placeholder="ดร. สมเกียรติ มั่นคง" class="luxury-input w-full" />
               </div>
               <div class="flex flex-col">
-                <label for="client_position" class="form-label">ตำแหน่ง <span class="text-red-400">*</span></label>
+                <label for="client_position" class="form-label">ตำแหน่ง <span class="text-[#D85A30]">*</span></label>
                 <input type="text" id="client_position" placeholder="ผู้ช่วยกรรมการผู้จัดการ" class="luxury-input w-full" />
               </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="flex flex-col">
-                <label for="client_company" class="form-label">ชื่อองค์กร / บริษัท / หน่วยงาน <span class="text-red-400">*</span></label>
+                <label for="client_company" class="form-label">ชื่อองค์กร / บริษัท / หน่วยงาน <span class="text-[#D85A30]">*</span></label>
                 <input type="text" id="client_company" placeholder="บริษัท เทค จำกัด (มหาชน)" class="luxury-input w-full" />
               </div>
               <div class="flex flex-col">
-                <label for="client_phone" class="form-label">เบอร์โทรศัพท์ <span class="text-red-400">*</span></label>
+                <label for="client_phone" class="form-label">เบอร์โทรศัพท์ <span class="text-[#D85A30]">*</span></label>
                 <input type="text" id="client_phone" placeholder="081-234-5678" class="luxury-input w-full" title="กรุณากรอกเบอร์โทรศัพท์สำหรับติดต่อกลับ" />
               </div>
             </div>
 
             <div class="flex flex-col">
-              <label for="client_email" class="form-label">อีเมลที่ติดต่อได้ <span class="text-red-400">*</span></label>
+              <label for="client_email" class="form-label">อีเมลที่ติดต่อได้ <span class="text-[#D85A30]">*</span></label>
               <input type="email" id="client_email" placeholder="executive@company.com" class="luxury-input w-full" />
             </div>
           </div>
 
           <!-- STEP 2: Meeting Purpose -->
           <div id="form_step_2" class="space-y-5 hidden">
-            <h3 class="text-sm uppercase font-sans font-bold tracking-widest text-[#F59E0B] gold-accent-header mb-4">ขั้นตอนที่ 2: วาระคำขอเข้าพบ</h3>
+            <h3 class="text-sm font-sans font-semibold tracking-wide text-[#0F172A] gold-accent-header mb-4">ขั้นตอนที่ 2: วาระคำขอเข้าพบ</h3>
             
             <div class="flex flex-col space-y-3">
-              <label class="form-label">กรุณาเลือกผู้บริหารที่ท่านต้องการนัดหมาย <span class="text-red-400">*</span></label>
+              <label class="form-label">กรุณาเลือกผู้บริหารที่ท่านต้องการนัดหมาย <span class="text-[#D85A30]">*</span></label>
               
               <!-- Hidden select to keep absolute compatibility with existing client.js -->
               <select id="executive_host" class="hidden">
@@ -288,23 +298,23 @@
 
             <!-- Main Purpose Radios -->
             <div class="flex flex-col space-y-2.5 pt-2">
-              <span class="form-label">วัตถุประสงค์หลัก <span class="text-red-400">*</span></span>
+              <span class="form-label">วัตถุประสงค์หลัก <span class="text-[#D85A30]">*</span></span>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                <label class="flex items-center space-x-2.5 text-xs cursor-pointer p-3 bg-slate-800/40 rounded-xl hover:bg-slate-800 border border-slate-700/60 transition-colors">
-                  <input type="radio" name="purpose_main" value="เพื่อขออนุมัติงบประมาณ" class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                  <span class="text-slate-200">เพื่อขออนุมัติงบประมาณ</span>
+                <label class="flex items-center space-x-2.5 text-xs cursor-pointer p-3 bg-white rounded-xl hover:bg-[#FAF8F3] border border-[#E8E2D4] transition-colors">
+                  <input type="radio" name="purpose_main" value="เพื่อขออนุมัติงบประมาณ" class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                  <span class="text-[#0F172A]">เพื่อขออนุมัติงบประมาณ</span>
                 </label>
-                <label class="flex items-center space-x-2.5 text-xs cursor-pointer p-3 bg-slate-800/40 rounded-xl hover:bg-slate-800 border border-slate-700/60 transition-colors">
-                  <input type="radio" name="purpose_main" value="เพื่อรายงานความคืบหน้า" class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                  <span class="text-slate-200">เพื่อรายงานความคืบหน้า</span>
+                <label class="flex items-center space-x-2.5 text-xs cursor-pointer p-3 bg-white rounded-xl hover:bg-[#FAF8F3] border border-[#E8E2D4] transition-colors">
+                  <input type="radio" name="purpose_main" value="เพื่อรายงานความคืบหน้า" class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                  <span class="text-[#0F172A]">เพื่อรายงานความคืบหน้า</span>
                 </label>
-                <label class="flex items-center space-x-2.5 text-xs cursor-pointer p-3 bg-slate-800/40 rounded-xl hover:bg-slate-800 border border-slate-700/60 transition-colors">
-                  <input type="radio" name="purpose_main" value="เพื่อปรึกษาหาแนวทางแก้ไข" class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                  <span class="text-slate-200">เพื่อปรึกษาหาแนวทางแก้ไข</span>
+                <label class="flex items-center space-x-2.5 text-xs cursor-pointer p-3 bg-white rounded-xl hover:bg-[#FAF8F3] border border-[#E8E2D4] transition-colors">
+                  <input type="radio" name="purpose_main" value="เพื่อปรึกษาหาแนวทางแก้ไข" class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                  <span class="text-[#0F172A]">เพื่อปรึกษาหาแนวทางแก้ไข</span>
                 </label>
-                <label class="flex items-center space-x-2.5 text-xs cursor-pointer p-3 bg-slate-800/40 rounded-xl hover:bg-slate-800 border border-slate-700/60 transition-colors">
-                  <input type="radio" name="purpose_main" id="purpose_main_other_radio" value="อื่นๆ" class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                  <span class="text-slate-200">อื่นๆ</span>
+                <label class="flex items-center space-x-2.5 text-xs cursor-pointer p-3 bg-white rounded-xl hover:bg-[#FAF8F3] border border-[#E8E2D4] transition-colors">
+                  <input type="radio" name="purpose_main" id="purpose_main_other_radio" value="อื่นๆ" class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                  <span class="text-[#0F172A]">อื่นๆ</span>
                 </label>
               </div>
               
@@ -316,7 +326,7 @@
 
             <!-- Subject Textarea -->
             <div class="flex flex-col pt-1">
-              <label for="purpose" class="form-label">หัวข้อการประชุม / จุดประสงค์ในการเข้าพบ <span class="text-red-400">*</span></label>
+              <label for="purpose" class="form-label">หัวข้อการประชุม / จุดประสงค์ในการเข้าพบ <span class="text-[#D85A30]">*</span></label>
               <textarea id="purpose" rows="3" placeholder="โปรดระบุวาระการหารือ หรือข้อมูลเพิ่มเติมเสนอผู้บริหารพิจารณา..." class="luxury-input w-full resize-none"></textarea>
             </div>
 
@@ -329,32 +339,32 @@
 
           <!-- STEP 3: Scheduling Styles -->
           <div id="form_step_3" class="space-y-5 hidden">
-            <h3 class="text-sm uppercase font-sans font-bold tracking-widest text-[#F59E0B] gold-accent-header mb-4">ขั้นตอนที่ 3: รูปแบบวัน/เวลาที่ท่านต้องการ</h3>
+            <h3 class="text-sm font-sans font-semibold tracking-wide text-[#0F172A] gold-accent-header mb-4">ขั้นตอนที่ 3: รูปแบบวัน/เวลาที่ท่านต้องการ</h3>
             
             <!-- Type Selector Radios -->
             <div class="grid grid-cols-2 gap-3.5">
-              <label class="flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-[#F59E0B] text-center bg-slate-800/50" id="label_booking_type_client">
+              <label class="flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-[#D97706] text-center bg-[#FAF8F3] shadow-sm" id="label_booking_type_client">
                 <input type="radio" name="booking_type" value="client_pick" checked class="sr-only" />
-                <span class="text-xs font-bold text-[#F59E0B] block">แบบที่ 1</span>
-                <span class="text-[10px] text-slate-300 mt-1">ท่านระบุวัน/เวลาด้วยตนเอง</span>
+                <span class="text-xs font-bold text-[#D97706] block">แบบที่ 1</span>
+                <span class="text-[10px] text-[#5F5E5A] mt-1">ท่านระบุวัน/เวลาด้วยตนเอง</span>
               </label>
-              <label class="flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-slate-700 bg-slate-900 text-center hover:border-slate-600" id="label_booking_type_sec">
+              <label class="flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-[#E8E2D4] bg-white text-center hover:border-[#D97706]/50" id="label_booking_type_sec">
                 <input type="radio" name="booking_type" value="secretary_allocate" class="sr-only" />
-                <span class="text-xs font-bold text-slate-400 block">แบบที่ 2</span>
-                <span class="text-[10px] text-slate-400 mt-1">ให้เลขาจัดสรรเวลาให้</span>
+                <span class="text-xs font-bold text-[#5F5E5A] block">แบบที่ 2</span>
+                <span class="text-[10px] text-[#5F5E5A] mt-1">ให้เลขาจัดสรรเวลาให้</span>
               </label>
             </div>
 
             <!-- Panel 1: Client Picks Date/Time -->
-            <div id="panel_booking_client" class="space-y-4 bg-slate-800/40 p-4 border border-slate-700/50 rounded-xl animate-fade-in">
-              <span class="form-label">กรุณาระบุวัน/เวลาที่ท่านต้องการ (ระบุได้สูงสุด 5 วัน) <span class="text-red-400">*</span></span>
+            <div id="panel_booking_client" class="space-y-4 bg-[#FAF8F3] p-4 border border-[#E8E2D4] rounded-xl animate-fade-in">
+              <span class="form-label">กรุณาระบุวัน/เวลาที่ท่านต้องการ (ระบุได้สูงสุด 5 วัน) <span class="text-[#D85A30]">*</span></span>
               
               <div id="proposed_dates_container" class="space-y-3">
                 <!-- Proposed date slots will be rendered dynamically by JavaScript -->
               </div>
 
               <div class="pt-1">
-                <button type="button" id="btn_add_proposed_date" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-semibold text-[#F59E0B] hover:text-amber-400 flex items-center space-x-1.5 transition-all">
+                <button type="button" id="btn_add_proposed_date" class="px-3 py-1.5 bg-white hover:bg-[#F1EFE8] border border-[#E8E2D4] rounded-lg text-xs font-semibold text-[#D97706] hover:text-[#B45309] flex items-center space-x-1.5 transition-all shadow-sm">
                   <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path>
                   </svg>
@@ -364,15 +374,15 @@
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
                 <div class="flex flex-col col-span-2">
-                  <span class="form-label">ระดับความสำคัญ <span class="text-red-400">*</span></span>
+                  <span class="form-label">ระดับความสำคัญ <span class="text-[#D85A30]">*</span></span>
                   <div class="flex items-center space-x-4 h-10">
                     <label class="flex items-center space-x-1.5 text-xs cursor-pointer">
-                      <input type="radio" name="priority_1" value="ด่วนมาก" class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                      <span class="text-red-400 font-bold">ด่วนมาก</span>
+                      <input type="radio" name="priority_1" value="ด่วนมาก" class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                      <span class="text-[#D85A30] font-bold">ด่วนมาก</span>
                     </label>
                     <label class="flex items-center space-x-1.5 text-xs cursor-pointer">
-                      <input type="radio" name="priority_1" value="ทั่วไป" checked class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                      <span class="text-slate-300">ทั่วไป</span>
+                      <input type="radio" name="priority_1" value="ทั่วไป" checked class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                      <span class="text-[#0F172A]">ทั่วไป</span>
                     </label>
                   </div>
                 </div>
@@ -380,29 +390,29 @@
             </div>
 
             <!-- Panel 2: Secretary Allocates -->
-            <div id="panel_booking_sec" class="space-y-4 bg-slate-800/40 p-4 border border-slate-700/50 rounded-xl animate-fade-in hidden">
+            <div id="panel_booking_sec" class="space-y-4 bg-[#FAF8F3] p-4 border border-[#E8E2D4] rounded-xl animate-fade-in hidden">
               <!-- บรรทัดที่ 1: จำนวนคิวที่ต้องการ -->
               <div class="flex flex-col">
-                <span class="form-label">จำนวนคิวที่ต้องการ <span class="text-red-400">*</span></span>
+                <span class="form-label">จำนวนคิวที่ต้องการ <span class="text-[#D85A30]">*</span></span>
                 <div class="flex items-center space-x-4 h-10">
                   <label class="flex items-center space-x-1.5 text-xs cursor-pointer">
-                    <input type="radio" name="slot_count" value="1" checked class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                    <span class="text-slate-200 font-medium">ต้องการ 1 คิว</span>
+                    <input type="radio" name="slot_count" value="1" checked class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                    <span class="text-[#0F172A] font-medium">ต้องการ 1 คิว</span>
                   </label>
                   <label class="flex items-center space-x-1.5 text-xs cursor-pointer">
-                    <input type="radio" name="slot_count" value="2" class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                    <span class="text-slate-200 font-medium">ต้องการ 2 คิว</span>
+                    <input type="radio" name="slot_count" value="2" class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                    <span class="text-[#0F172A] font-medium">ต้องการ 2 คิว</span>
                   </label>
                   <label class="flex items-center space-x-1.5 text-xs cursor-pointer">
-                    <input type="radio" name="slot_count" value="3" class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                    <span class="text-slate-200 font-medium">ต้องการ 3 คิว</span>
+                    <input type="radio" name="slot_count" value="3" class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                    <span class="text-[#0F172A] font-medium">ต้องการ 3 คิว</span>
                   </label>
                 </div>
               </div>
 
               <!-- บรรทัดที่ 2: ระยะเวลาที่ต้องการ (Duration) -->
               <div class="flex flex-col">
-                <label for="booking2_hours" class="form-label">ระยะเวลาที่ต้องการ (Duration) <span class="text-red-400">*</span></label>
+                <label for="booking2_hours" class="form-label">ระยะเวลาที่ต้องการ (Duration) <span class="text-[#D85A30]">*</span></label>
                 <input type="text" id="booking2_hours" placeholder="เช่น 30 นาที, 1 ชั่วโมง, 1.5 ชั่วโมง" class="luxury-input w-full" />
               </div>
 
@@ -424,44 +434,44 @@
               </div>
 
               <div class="flex flex-col">
-                <span class="form-label">ระดับความสำคัญ <span class="text-red-400">*</span></span>
+                <span class="form-label">ระดับความสำคัญ <span class="text-[#D85A30]">*</span></span>
                 <div class="flex items-center space-x-4 h-10">
                   <label class="flex items-center space-x-1.5 text-xs cursor-pointer">
-                    <input type="radio" name="priority_2" value="ด่วนมาก" class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                    <span class="text-red-400 font-bold">ด่วนมาก</span>
+                    <input type="radio" name="priority_2" value="ด่วนมาก" class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                    <span class="text-[#D85A30] font-bold">ด่วนมาก</span>
                   </label>
                   <label class="flex items-center space-x-1.5 text-xs cursor-pointer">
-                    <input type="radio" name="priority_2" value="ทั่วไป" checked class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                    <span class="text-slate-300">ทั่วไป</span>
+                    <input type="radio" name="priority_2" value="ทั่วไป" checked class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                    <span class="text-[#0F172A]">ทั่วไป</span>
                   </label>
                 </div>
               </div>
-              <span class="text-[10px] text-[#94A3B8] font-sans italic block">** เลขานุการจะดําเนินการพิจารณาตารางเวลาที่สะดวกรวดเร็วที่สุดและติดต่อแจ้งกลับทางอีเมล</span>
+              <span class="text-[10px] text-[#5F5E5A] font-sans italic block">** เลขานุการจะดําเนินการพิจารณาตารางเวลาที่สะดวกรวดเร็วที่สุดและติดต่อแจ้งกลับทางอีเมล</span>
             </div>
           </div>
 
           <!-- STEP 4: Meeting Format & Location -->
           <div id="form_step_4" class="space-y-5 hidden">
-            <h3 class="text-sm uppercase font-sans font-bold tracking-widest text-[#F59E0B] gold-accent-header mb-4">ขั้นตอนที่ 4: รูปแบบและสถานที่เข้าพบ</h3>
+            <h3 class="text-sm font-sans font-semibold tracking-wide text-[#0F172A] gold-accent-header mb-4">ขั้นตอนที่ 4: รูปแบบและสถานที่เข้าพบ</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="flex flex-col">
-                <span class="form-label">รูปแบบการประชุม <span class="text-red-400">*</span></span>
+                <span class="form-label">รูปแบบการประชุม <span class="text-[#D85A30]">*</span></span>
                 <div class="flex items-center space-x-6 h-12">
                   <label class="flex items-center space-x-2 text-xs cursor-pointer">
-                    <input type="radio" name="meeting_format" value="online" checked class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                    <span class="text-slate-200">รูปแบบออนไลน์ (Zoom/Meet/Teams)</span>
+                    <input type="radio" name="meeting_format" value="online" checked class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                    <span class="text-[#0F172A]">รูปแบบออนไลน์ (Zoom/Meet/Teams)</span>
                   </label>
                   <label class="flex items-center space-x-2 text-xs cursor-pointer">
-                    <input type="radio" name="meeting_format" value="onsite" class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                    <span class="text-slate-200">รูปแบบออนไซต์ (Onsite)</span>
+                    <input type="radio" name="meeting_format" value="onsite" class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                    <span class="text-[#0F172A]">รูปแบบออนไซต์ (Onsite)</span>
                   </label>
                 </div>
               </div>
 
               <!-- Location input field (shown if onsite is selected) -->
               <div id="location_container" class="flex flex-col hidden animate-fade-in">
-                <label for="meeting_location" class="form-label">โปรดระบุสถานที่/ห้องประชุม <span class="text-red-400">*</span></label>
+                <label for="meeting_location" class="form-label">โปรดระบุสถานที่/ห้องประชุม <span class="text-[#D85A30]">*</span></label>
                 <input type="text" id="meeting_location" placeholder="เช่น ห้องประชุมใหญ่ ชั้น 4 อาคาร A" class="luxury-input w-full" />
               </div>
             </div>
@@ -469,27 +479,27 @@
 
           <!-- STEP 5: Additional Attendees -->
           <div id="form_step_5" class="space-y-5 hidden">
-            <h3 class="text-sm uppercase font-sans font-bold tracking-widest text-[#F59E0B] gold-accent-header mb-4">ขั้นตอนที่ 5: ผู้เข้าร่วมประชุมเพิ่มเติม</h3>
+            <h3 class="text-sm font-sans font-semibold tracking-wide text-[#0F172A] gold-accent-header mb-4">ขั้นตอนที่ 5: ผู้เข้าร่วมประชุมเพิ่มเติม</h3>
             
             <div class="flex flex-col space-y-2.5">
-              <span class="form-label">มีผู้เข้าร่วมประชุมเพิ่มเติมหรือไม่ <span class="text-red-400">*</span></span>
+              <span class="form-label">มีผู้เข้าร่วมประชุมเพิ่มเติมหรือไม่ <span class="text-[#D85A30]">*</span></span>
               <div class="flex items-center space-x-6">
                 <label class="flex items-center space-x-2 text-xs cursor-pointer">
-                  <input type="radio" name="has_attendees" value="no" checked class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                  <span class="text-slate-200">ไม่มี (เข้าพบคนเดียว)</span>
+                  <input type="radio" name="has_attendees" value="no" checked class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                  <span class="text-[#0F172A]">ไม่มี (เข้าพบคนเดียว)</span>
                 </label>
                 <label class="flex items-center space-x-2 text-xs cursor-pointer">
-                  <input type="radio" name="has_attendees" value="yes" class="h-4 w-4 text-[#F59E0B] focus:ring-[#F59E0B]" />
-                  <span class="text-slate-200">มีผู้เข้าร่วมเพิ่มเติม</span>
+                  <input type="radio" name="has_attendees" value="yes" class="h-4 w-4 text-[#D97706] focus:ring-[#D97706]" />
+                  <span class="text-[#0F172A]">มีผู้เข้าร่วมเพิ่มเติม</span>
                 </label>
               </div>
             </div>
 
             <!-- Dynamic Attendees Container -->
-            <div id="attendees_section" class="hidden space-y-3 bg-slate-800/40 p-4 border border-slate-700/50 rounded-xl animate-fade-in">
-              <div class="flex justify-between items-center border-b border-slate-700 pb-2.5 mb-2.5">
-                <span class="text-xs font-bold text-slate-200">รายชื่อผู้เข้าร่วมประชุมเพิ่มเติม (สูงสุด 20 คน)</span>
-                <button type="button" id="btn_add_attendee" class="text-[10px] bg-[#F59E0B] text-slate-950 hover:bg-amber-400 font-bold py-1.5 px-3 rounded-lg transition-all cursor-pointer">
+            <div id="attendees_section" class="hidden space-y-3 bg-[#FAF8F3] p-4 border border-[#E8E2D4] rounded-xl animate-fade-in">
+              <div class="flex justify-between items-center border-b border-[#E8E2D4] pb-2.5 mb-2.5">
+                <span class="text-xs font-bold text-[#0F172A]">รายชื่อผู้เข้าร่วมประชุมเพิ่มเติม (สูงสุด 20 คน)</span>
+                <button type="button" id="btn_add_attendee" class="text-[10px] bg-[#0F172A] text-white hover:bg-[#1E293B] font-bold py-1.5 px-3 rounded-lg transition-all cursor-pointer">
                   + เพิ่มผู้เข้าร่วม
                 </button>
               </div>
@@ -502,26 +512,26 @@
 
           <!-- STEP 6: Confirmation -->
           <div id="form_step_6" class="space-y-5 hidden">
-            <h3 class="text-sm uppercase font-sans font-bold tracking-widest text-[#F59E0B] gold-accent-header mb-4">ขั้นตอนที่ 6: ตรวจสอบและส่งคำขอนัดหมาย</h3>
+            <h3 class="text-sm font-sans font-semibold tracking-wide text-[#0F172A] gold-accent-header mb-4">ขั้นตอนที่ 6: ตรวจสอบและส่งคำขอนัดหมาย</h3>
             
             <!-- Summary Recap Card as requested -->
-            <div id="summary_recap" class="bg-slate-900/60 p-5 border border-slate-800 rounded-xl space-y-4 text-xs text-slate-300">
+            <div id="summary_recap" class="bg-[#FAF8F3] p-5 border border-[#E8E2D4] rounded-xl space-y-4 text-xs text-[#0F172A]">
               <!-- Rendered dynamically by client.js -->
             </div>
 
             <!-- Agreement Checkbox -->
-            <div class="space-y-4 pt-4 border-t border-slate-800/80">
-              <label class="flex items-start space-x-2.5 text-xs cursor-pointer p-3.5 bg-amber-500/5 border border-amber-500/20 rounded-xl">
-                <input type="checkbox" id="agreed_to_calendar_invite" required class="h-4 w-4 rounded border-slate-700 text-[#F59E0B] focus:ring-[#F59E0B] bg-slate-800 mt-0.5" />
-                <span class="text-slate-300 leading-relaxed font-medium">
-                  ข้าพเจ้ารับทราบและดำเนินการส่งคำเชิญผ่าน Google Calendar ให้แก่ผู้เข้าร่วมทุกท่าน เมื่อได้รับการอนุมัติดังกล่าวแล้ว <span class="text-red-400 font-bold">*</span>
+            <div class="space-y-4 pt-4 border-t border-[#E8E2D4]">
+              <label class="flex items-start space-x-2.5 text-xs cursor-pointer p-3.5 bg-[#FFFBEB] border border-[#FDE68A] rounded-xl">
+                <input type="checkbox" id="agreed_to_calendar_invite" required class="h-4 w-4 rounded border-[#E8E2D4] text-[#D97706] focus:ring-[#D97706] mt-0.5" />
+                <span class="text-[#0F172A] leading-relaxed font-medium">
+                  ข้าพเจ้ารับทราบและดำเนินการส่งคำเชิญผ่าน Google Calendar ให้แก่ผู้เข้าร่วมทุกท่าน เมื่อได้รับการอนุมัติดังกล่าวแล้ว <span class="text-[#D85A30] font-bold">*</span>
                 </span>
               </label>
             </div>
           </div>
 
           <!-- Wizard Navigation Footer Buttons -->
-          <div class="pt-6 border-t border-slate-800 flex justify-between items-center gap-3">
+          <div class="pt-6 border-t border-[#E8E2D4] flex justify-between items-center gap-3">
             <button type="button" id="btn_prev" class="btn-secondary hidden">
               ย้อนกลับ
             </button>
@@ -538,45 +548,45 @@
       </section>
 
       <!-- Luxury Confirmation Modal (Hidden by Default) -->
-      <div id="success_modal" class="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 hidden opacity-0 transition-all duration-300">
-        <div class="bg-slate-900 border border-slate-800/80 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden p-6 md:p-8 transform scale-95 transition-all duration-300">
+      <div id="success_modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden opacity-0 transition-all duration-300">
+        <div class="bg-white border border-[#E8E2D4] rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden p-6 md:p-8 transform scale-95 transition-all duration-300 text-[#0F172A]">
           
           <div class="text-center mb-6">
-            <div class="h-14 w-14 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/30">
-              <svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="h-14 w-14 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-200">
+              <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
               </svg>
             </div>
-            <h2 class="text-2xl font-bold text-slate-100">ส่งคำขอนัดหมายเรียบร้อยแล้ว</h2>
-            <p class="text-[10px] text-slate-400 mt-1.5 uppercase tracking-widest font-mono">Appointment Registry Ticket</p>
+            <h2 class="text-2xl font-bold text-[#0F172A]">ส่งคำขอนัดหมายเรียบร้อยแล้ว</h2>
+            <p class="text-[10px] text-[#5F5E5A] mt-1.5 uppercase tracking-widest font-mono">Appointment Registry Ticket</p>
           </div>
 
-          <div class="bg-slate-800/50 border border-slate-700/60 rounded-xl p-5 mb-5 text-center">
-            <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">รหัสอ้างอิงนัดหมาย (Reference Code)</span>
+          <div class="bg-[#FAF8F3] border border-[#E8E2D4] rounded-xl p-5 mb-5 text-center">
+            <span class="text-[9px] uppercase tracking-widest text-[#5F5E5A] font-bold">รหัสอ้างอิงนัดหมาย (Reference Code)</span>
             <div class="flex items-center justify-center space-x-2 mt-1.5">
-              <span id="success_ref_code" class="text-xl md:text-2xl font-mono font-bold text-[#F59E0B] tracking-wider">APT-XXXXXXXX-XXXX</span>
-              <button id="copy_code_btn" class="text-slate-400 hover:text-white hover:bg-slate-700/50 p-1.5 rounded-lg transition-all" title="คัดลอกรหัส">
+              <span id="success_ref_code" class="text-xl md:text-2xl font-mono font-bold text-[#D97706] tracking-wider">APT-XXXXXXXX-XXXX</span>
+              <button id="copy_code_btn" class="text-[#5F5E5A] hover:text-[#0F172A] hover:bg-[#E8E2D4]/50 p-1.5 rounded-lg transition-all" title="คัดลอกรหัส">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
                 </svg>
               </button>
             </div>
-            <p class="text-[10px] text-amber-400/90 mt-2">⚠️ กรุณาจดบันทึก หรือแคปหน้าจอเพื่อใช้สำหรับเป็นรหัสอ้างอิงในระบบติดตามสถานะ</p>
+            <p class="text-[10px] text-[#D85A30] mt-2">⚠️ กรุณาจดบันทึก หรือแคปหน้าจอเพื่อใช้สำหรับเป็นรหัสอ้างอิงในระบบติดตามสถานะ</p>
           </div>
 
           <!-- Simple recap card -->
-          <div class="border border-slate-800 rounded-xl p-4 mb-6 bg-slate-950/40">
-            <span class="text-[9px] uppercase tracking-wider font-bold text-slate-400 block mb-2 border-b border-slate-800 pb-1.5">สรุปข้อมูลคำขอ</span>
-            <div id="success_details" class="space-y-1.5 text-xs text-slate-300">
+          <div class="border border-[#E8E2D4] rounded-xl p-4 mb-6 bg-[#FAF8F3]">
+            <span class="text-[9px] uppercase tracking-wider font-bold text-[#5F5E5A] block mb-2 border-b border-[#E8E2D4] pb-1.5">สรุปข้อมูลคำขอ</span>
+            <div id="success_details" class="space-y-1.5 text-xs text-[#0F172A]">
               <!-- Loaded dynamically -->
             </div>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
-            <button id="close_modal_btn" class="w-full text-center bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 px-4 rounded-xl transition-all text-xs">
+            <button id="close_modal_btn" class="w-full text-center bg-[#F1EFE8] hover:bg-[#E8E2D4] text-[#0F172A] font-bold py-3 px-4 rounded-xl transition-all text-xs">
               ปิดหน้าต่าง (Close)
             </button>
-            <a id="go_status_btn" href="status.html" class="w-full text-center bg-[#F59E0B] hover:bg-amber-400 text-slate-950 font-bold py-3 px-4 rounded-xl transition-all text-xs inline-flex items-center justify-center">
+            <a id="go_status_btn" href="status.html" class="w-full text-center bg-[#0F172A] hover:bg-[#1E293B] text-white font-bold py-3 px-4 rounded-xl transition-all text-xs inline-flex items-center justify-center">
               ตรวจสอบสถานะ
             </a>
           </div>
@@ -587,8 +597,8 @@
     </main>
 
     <!-- Footer Area -->
-    <footer id="footer_ref" class="py-8 bg-slate-950/45 border-t border-slate-900 px-4 text-center text-xs">
-      <div class="max-w-4xl mx-auto space-y-1.5 text-slate-400">
+    <footer id="footer_ref" class="py-8 bg-[#FAF8F3] border-t border-[#E8E2D4] px-4 text-center text-xs">
+      <div class="max-w-4xl mx-auto space-y-1.5 text-[#8B8982]">
         <p class="font-light">&copy; 2026 Executive Appointment Registry. All rights reserved.</p>
       </div>
     </footer>

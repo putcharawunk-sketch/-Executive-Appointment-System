@@ -79,13 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (execCardsContainer) {
     execCardsContainer.innerHTML = EXECUTIVE_HOSTS.map(exec => `
       <div data-exec-id="${exec.id}" class="executive-card cursor-pointer rounded-xl p-4 flex flex-col items-center text-center">
-        <div class="relative w-24 h-24 mb-3 rounded-full overflow-hidden border border-slate-700/80 flex items-center justify-center bg-slate-800 shadow-inner">
+        <div class="relative w-24 h-24 mb-3 rounded-full overflow-hidden border border-[#E8E2D4] flex items-center justify-center bg-[#F1EFE8] shadow-inner">
           <img src="${exec.imageUrl}" alt="${exec.name}" 
                referrerpolicy="no-referrer" 
                class="w-full h-full object-cover object-top"
                style="object-position: center 20%;"
                onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
-          <div class="hidden w-full h-full flex items-center justify-center bg-slate-950 text-amber-500 font-bold text-xs font-mono uppercase">${exec.id}</div>
+          <div class="hidden w-full h-full flex items-center justify-center bg-[#F1EFE8] text-[#D97706] font-bold text-xs font-mono uppercase">${exec.id}</div>
         </div>
         <p class="executive-card-name mt-2">${exec.name}</p>
         <p class="executive-card-title mt-1 leading-tight">${exec.title}</p>
@@ -107,6 +107,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         card.classList.add('selected');
       });
+    });
+  }
+
+  // Real-time email domain validation for Step 1
+  const clientEmailInput = document.getElementById('client_email');
+  if (clientEmailInput) {
+    clientEmailInput.addEventListener('blur', () => {
+      const val = clientEmailInput.value.trim().toLowerCase();
+      const existingWarning = document.getElementById('email_domain_warning');
+      if (existingWarning) existingWarning.remove();
+      
+      if (val && !val.endsWith('@bu.ac.th')) {
+        const warning = document.createElement('p');
+        warning.id = 'email_domain_warning';
+        warning.className = 'text-[#D85A30] text-xs mt-1';
+        warning.textContent = 'กรุณาใช้อีเมลมหาวิทยาลัยกรุงเทพ (@bu.ac.th) เท่านั้น';
+        clientEmailInput.parentElement.appendChild(warning);
+      }
     });
   }
 
@@ -135,11 +153,11 @@ document.addEventListener('DOMContentLoaded', () => {
     proposedDatesContainer.innerHTML = proposedSlots.map((slot, index) => {
       const isOnlyOne = proposedSlots.length === 1;
       return `
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center bg-slate-900/30 p-3 rounded-xl border border-slate-700/30 relative" data-slot-id="${slot.id}">
-          <div class="lg:col-span-2 text-xs font-bold text-[#F59E0B]">วันที่ต้องการที่ ${index + 1}</div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center bg-white p-3 rounded-xl border border-[#E8E2D4] relative shadow-sm" data-slot-id="${slot.id}">
+          <div class="lg:col-span-2 text-xs font-bold text-[#D97706]">วันที่ต้องการที่ ${index + 1}</div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3 lg:col-span-9">
             <div class="flex flex-col">
-              <label class="form-label mb-1">วันที่ <span class="text-red-400">*</span></label>
+              <label class="form-label mb-1">วันที่ <span class="text-[#D85A30]">*</span></label>
               <input type="date" class="proposed-date-input luxury-input w-full" value="${slot.date}" min="${minDateStr}" />
             </div>
             <div class="flex flex-col">
@@ -152,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
           <div class="lg:col-span-1 flex justify-end lg:pt-4">
-            <button type="button" class="btn-delete-proposed-slot p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors" data-slot-id="${slot.id}" ${isOnlyOne ? 'disabled style="opacity: 0.3; cursor: not-allowed;"' : ''}>
+            <button type="button" class="btn-delete-proposed-slot p-2 text-[#D85A30] hover:text-[#B91C1C] hover:bg-red-50 rounded-lg transition-colors" data-slot-id="${slot.id}" ${isOnlyOne ? 'disabled style="opacity: 0.3; cursor: not-allowed;"' : ''}>
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
               </svg>
@@ -236,14 +254,14 @@ document.addEventListener('DOMContentLoaded', () => {
       panelBookingClient.classList.remove('hidden');
       panelBookingSec.classList.add('hidden');
       
-      labelBookingTypeClient.className = 'flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-[#F59E0B] text-center bg-slate-800/50';
-      labelBookingTypeSec.className = 'flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-slate-700 bg-slate-900 text-center hover:border-slate-600';
+      labelBookingTypeClient.className = 'flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-[#D97706] text-center bg-[#FAF8F3] shadow-sm';
+      labelBookingTypeSec.className = 'flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-[#E8E2D4] bg-white text-center hover:border-[#D97706]/50';
     } else {
       panelBookingClient.classList.add('hidden');
       panelBookingSec.classList.remove('hidden');
       
-      labelBookingTypeClient.className = 'flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-slate-700 bg-slate-900 text-center hover:border-slate-600';
-      labelBookingTypeSec.className = 'flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-[#F59E0B] text-center bg-slate-800/50';
+      labelBookingTypeClient.className = 'flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-[#E8E2D4] bg-white text-center hover:border-[#D97706]/50';
+      labelBookingTypeSec.className = 'flex flex-col items-center justify-center p-4 border rounded-xl cursor-pointer transition-all border-[#D97706] text-center bg-[#FAF8F3] shadow-sm';
     }
   }
 
@@ -321,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     attendeesList.forEach((attendee, index) => {
       const row = document.createElement('div');
-      row.className = 'grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-900 border border-slate-800 p-4 rounded-xl relative';
+      row.className = 'grid grid-cols-1 md:grid-cols-3 gap-4 bg-white border border-[#E8E2D4] p-4 rounded-xl relative shadow-sm';
       row.innerHTML = `
         <div>
           <label class="form-label">ชื่อ-นามสกุลจริง</label>
@@ -336,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <label class="form-label">อีเมล</label>
             <input type="email" value="${attendee.email}" placeholder="email@company.com" class="luxury-input w-full attendee-email" data-index="${index}" />
           </div>
-          <button type="button" class="btn-delete-attendee px-4 h-[50.5px] bg-red-500/10 hover:bg-red-500/25 text-red-400 rounded-lg transition-all text-sm border border-red-500/20 font-semibold" data-index="${index}" title="ลบผู้เข้าร่วม">
+          <button type="button" class="btn-delete-attendee px-4 h-[44px] bg-red-50 hover:bg-red-100 text-[#D85A30] rounded-lg transition-all text-sm border border-red-200 font-semibold" data-index="${index}" title="ลบผู้เข้าร่วม">
             ลบ
           </button>
         </div>
@@ -412,6 +430,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const email = document.getElementById('client_email').value.trim();
       if (!name || !position || !company || !phone || !email) {
         alert('กรุณากรอกข้อมูลผู้ประสานงานให้ครบถ้วนก่อนไปขั้นตอนถัดไป');
+        return false;
+      }
+      const emailLower = email.toLowerCase().trim();
+      if (!emailLower.endsWith('@bu.ac.th')) {
+        alert('ระบบนี้เปิดให้บริการเฉพาะบุคลากรและนักศึกษามหาวิทยาลัยกรุงเทพ (อีเมล @bu.ac.th) เท่านั้น กรุณาใช้อีเมลของมหาวิทยาลัยในการลงทะเบียน');
         return false;
       }
       return true;
@@ -553,8 +576,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const timeStr = (slot.startTime && slot.endTime) ? `${slot.startTime} - ${slot.endTime} น.` : 'ยังไม่ระบุเวลา';
         const dateStr = slot.date ? slot.date : '-';
         return `
-          <div class="flex items-start gap-2.5 ${idx < proposedSlots.length - 1 ? 'border-b border-white/[0.06] pb-2 mb-2' : ''}">
-            <svg class="h-4 w-4 text-[#F59E0B] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex items-start gap-2.5 ${idx < proposedSlots.length - 1 ? 'border-b border-[#E8E2D4] pb-2 mb-2' : ''}">
+            <svg class="h-4 w-4 text-[#D97706] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
             <div>
@@ -567,8 +590,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       dateText = `
         <div style="display:flex; flex-direction:column; gap:10px;">
-          <div class="border-b border-white/[0.06] pb-[10px] flex items-start gap-2.5">
-            <svg class="h-4 w-4 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="border-b border-[#E8E2D4] pb-[10px] flex items-start gap-2.5">
+            <svg class="h-4 w-4 text-[#5F5E5A] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
             </svg>
             <div>
@@ -576,19 +599,19 @@ document.addEventListener('DOMContentLoaded', () => {
               <p class="summary-value" style="margin-bottom: 0 !important;">แบบที่ 1 (ระบุวันเวลาเอง)</p>
             </div>
           </div>
-          <div class="border-b border-white/[0.06] pb-[10px]">
+          <div class="border-b border-[#E8E2D4] pb-[10px]">
             <span class="summary-label">วันเวลาที่ขอเสนอ</span>
-            <div class="space-y-2 bg-slate-950/20 p-2.5 rounded-lg border border-slate-800/50 mt-1">
+            <div class="space-y-2 bg-[#FAF8F3] p-2.5 rounded-lg border border-[#E8E2D4] mt-1">
               ${slotsHtml}
             </div>
           </div>
           <div class="flex items-start gap-2.5">
-            <svg class="h-4 w-4 ${prioVal === 'ด่วนมาก' ? 'text-red-400' : 'text-slate-400'} shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-4 w-4 ${prioVal === 'ด่วนมาก' ? 'text-[#D85A30]' : 'text-[#5F5E5A]'} shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
             </svg>
             <div>
               <span class="summary-label">ระดับความสำคัญ</span>
-              <p class="${prioVal === 'ด่วนมาก' ? 'text-red-400 font-bold' : 'summary-value'}" style="margin-bottom: 0 !important;">${prioVal}</p>
+              <p class="${prioVal === 'ด่วนมาก' ? 'text-[#D85A30] font-bold' : 'summary-value'}" style="margin-bottom: 0 !important;">${prioVal}</p>
             </div>
           </div>
         </div>
@@ -608,8 +631,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       dateText = `
         <div style="display:flex; flex-direction:column; gap:10px;">
-          <div class="border-b border-white/[0.06] pb-[10px] flex items-start gap-2.5">
-            <svg class="h-4 w-4 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="border-b border-[#E8E2D4] pb-[10px] flex items-start gap-2.5">
+            <svg class="h-4 w-4 text-[#5F5E5A] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
             </svg>
             <div>
@@ -617,8 +640,8 @@ document.addEventListener('DOMContentLoaded', () => {
               <p class="summary-value" style="margin-bottom: 0 !important;">แบบที่ 2 (ให้เลขาฯ จัดสรรเวลาให้)</p>
             </div>
           </div>
-          <div class="border-b border-white/[0.06] pb-[10px] flex items-start gap-2.5">
-            <svg class="h-4 w-4 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="border-b border-[#E8E2D4] pb-[10px] flex items-start gap-2.5">
+            <svg class="h-4 w-4 text-[#5F5E5A] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             <div>
@@ -626,8 +649,8 @@ document.addEventListener('DOMContentLoaded', () => {
               <p class="summary-value" style="margin-bottom: 0 !important;">ต้องการ ${slotsCount} คิว (${hoursFormatted})</p>
             </div>
           </div>
-          <div class="border-b border-white/[0.06] pb-[10px] flex items-start gap-2.5">
-            <svg class="h-4 w-4 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="border-b border-[#E8E2D4] pb-[10px] flex items-start gap-2.5">
+            <svg class="h-4 w-4 text-[#5F5E5A] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
             <div>
@@ -636,12 +659,12 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
           <div class="flex items-start gap-2.5">
-            <svg class="h-4 w-4 ${prioVal === 'ด่วนมาก' ? 'text-red-400' : 'text-slate-400'} shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-4 w-4 ${prioVal === 'ด่วนมาก' ? 'text-[#D85A30]' : 'text-[#5F5E5A]'} shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
             </svg>
             <div>
               <span class="summary-label">ระดับความสำคัญ</span>
-              <p class="${prioVal === 'ด่วนมาก' ? 'text-red-400 font-bold' : 'summary-value'}" style="margin-bottom: 0 !important;">${prioVal}</p>
+              <p class="${prioVal === 'ด่วนมาก' ? 'text-[#D85A30] font-bold' : 'summary-value'}" style="margin-bottom: 0 !important;">${prioVal}</p>
             </div>
           </div>
         </div>
@@ -661,8 +684,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     summaryContainer.innerHTML = `
       <div class="space-y-4">
-        <div class="border-b border-slate-800/60 pb-3">
-          <h4 class="text-xs font-bold text-[#F59E0B] uppercase tracking-wider flex items-center gap-2">
+        <div class="border-b border-[#E8E2D4] pb-3">
+          <h4 class="text-xs font-bold text-[#D97706] uppercase tracking-wider flex items-center gap-2">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
@@ -670,17 +693,17 @@ document.addEventListener('DOMContentLoaded', () => {
           </h4>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-slate-900/40 p-5 rounded-lg border border-slate-800 flex flex-col justify-between">
+          <div class="bg-white p-5 rounded-lg border border-[#E8E2D4] flex flex-col justify-between shadow-sm">
             <div class="flex flex-col space-y-[10px] w-full">
-              <div class="border-b border-white/[0.06] pb-[10px]">
+              <div class="border-b border-[#E8E2D4] pb-[10px]">
                 <span class="summary-label">ชื่อ-นามสกุล</span>
                 <p class="summary-value">${name}</p>
               </div>
-              <div class="border-b border-white/[0.06] pb-[10px]">
+              <div class="border-b border-[#E8E2D4] pb-[10px]">
                 <span class="summary-label">ตำแหน่ง</span>
                 <p class="summary-value">${position}</p>
               </div>
-              <div class="border-b border-white/[0.06] pb-[10px]">
+              <div class="border-b border-[#E8E2D4] pb-[10px]">
                 <span class="summary-label">องค์กร / บริษัท / หน่วยงาน</span>
                 <p class="summary-value">${company}</p>
               </div>
@@ -690,14 +713,14 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
           </div>
-          <div class="bg-slate-900/40 p-5 rounded-lg border border-slate-800 flex flex-col justify-between">
+          <div class="bg-white p-5 rounded-lg border border-[#E8E2D4] flex flex-col justify-between shadow-sm">
             <div class="flex flex-col space-y-[10px] w-full">
-              <div class="border-b border-white/[0.06] pb-[10px]">
+              <div class="border-b border-[#E8E2D4] pb-[10px]">
                 <span class="summary-label">ผู้บริหารที่ท่านต้องการนัดหมาย</span>
-                <p style="font-weight: 700; color: #F59E0B; font-size: 16px; margin-bottom: 4px;">${hostName}</p>
-                ${hostTitle ? `<p style="font-weight: 400; color: #94A3B8; font-size: 12px; margin-bottom: 0 !important;">${hostTitle}</p>` : ''}
+                <p style="font-weight: 700; color: #D97706; font-size: 16px; margin-bottom: 4px;">${hostName}</p>
+                ${hostTitle ? `<p style="font-weight: 400; color: #5F5E5A; font-size: 12px; margin-bottom: 0 !important;">${hostTitle}</p>` : ''}
               </div>
-              <div class="border-b border-white/[0.06] pb-[10px]">
+              <div class="border-b border-[#E8E2D4] pb-[10px]">
                 <span class="summary-label">วัตถุประสงค์หลัก</span>
                 <p class="summary-value">${purposeMain}</p>
               </div>
@@ -706,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p class="summary-value" style="margin-bottom: 0 !important;">${purpose}</p>
               </div>
               ${additionalDetails ? `
-              <div class="border-t border-white/[0.06] pt-[10px] mt-1">
+              <div class="border-t border-[#E8E2D4] pt-[10px] mt-1">
                 <span class="summary-label">รายละเอียดเพิ่มเติม</span>
                 <p class="summary-value" style="margin-bottom: 0 !important;">${additionalDetails}</p>
               </div>
@@ -715,17 +738,17 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-slate-900/40 p-5 rounded-lg border border-slate-800 flex flex-col justify-between">
+          <div class="bg-white p-5 rounded-lg border border-[#E8E2D4] flex flex-col justify-between shadow-sm">
             <div class="flex flex-col space-y-[10px] w-full">
               <span class="summary-label">รูปแบบการประชุม</span>
               <p class="summary-value" style="margin-bottom: 0 !important;">${formatText}</p>
             </div>
           </div>
-          <div class="bg-slate-900/40 p-5 rounded-lg border border-slate-800">
+          <div class="bg-white p-5 rounded-lg border border-[#E8E2D4] shadow-sm">
             ${dateText}
           </div>
         </div>
-        <div class="bg-slate-900/40 p-5 rounded-lg border border-slate-800">
+        <div class="bg-white p-5 rounded-lg border border-[#E8E2D4] shadow-sm">
           <span class="summary-label">รายชื่อผู้เข้าร่วมประชุมเพิ่มเติม</span>
           <p class="summary-value" style="margin-bottom: 0 !important; line-height: 1.6;">${attendeesText}</p>
         </div>
@@ -750,16 +773,25 @@ document.addEventListener('DOMContentLoaded', () => {
       if (dot) {
         if (i < currentStep) {
           // Completed
-          dot.className = "w-8 h-8 rounded-full flex items-center justify-center border-2 border-[#10B981] bg-[#10B981] text-slate-950 font-bold text-xs transition-all duration-300";
+          dot.className = "w-[26px] h-[26px] rounded-full flex items-center justify-center bg-[#D97706] text-white font-bold text-xs transition-all duration-300 shadow-sm";
           dot.innerHTML = "✓";
         } else if (i === currentStep) {
           // Active
-          dot.className = "w-8 h-8 rounded-full flex items-center justify-center border-2 border-[#F59E0B] bg-slate-900 text-[#F59E0B] font-bold text-xs shadow-[0_0_12px_rgba(245,158,11,0.4)] transition-all duration-300";
+          dot.className = "w-[26px] h-[26px] rounded-full flex items-center justify-center bg-[#D97706] text-white font-bold text-xs shadow-md transition-all duration-300 ring-4 ring-[#D97706]/20";
           dot.innerHTML = i;
         } else {
           // Future
-          dot.className = "w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-xs transition-all duration-300";
+          dot.className = "w-[26px] h-[26px] rounded-full flex items-center justify-center bg-[#F1EFE8] text-[#B4B2A9] font-bold text-xs transition-all duration-300";
           dot.innerHTML = i;
+        }
+
+        const dotLabel = dot.parentElement ? dot.parentElement.querySelector('span') : null;
+        if (dotLabel) {
+          if (i <= currentStep) {
+            dotLabel.className = "text-[9px] text-[#0F172A] mt-2 font-semibold hidden md:block";
+          } else {
+            dotLabel.className = "text-[9px] text-[#B4B2A9] mt-2 font-medium hidden md:block";
+          }
         }
       }
     }
@@ -1053,7 +1085,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const originalText = submitBtn.innerHTML;
       submitBtn.disabled = true;
       submitBtn.innerHTML = `
-        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-slate-950 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
@@ -1083,8 +1115,8 @@ document.addEventListener('DOMContentLoaded', () => {
               return `<p>• วันที่ ${slot.date} ${timeText}</p>`;
             }).join('');
             timeDisplayHtml = `
-              <div class="text-xs text-slate-300">
-                <p class="font-semibold text-slate-400">วันที่เสนอเข้าพบ:</p>
+              <div class="text-xs text-[#0F172A]">
+                <p class="font-semibold text-[#5F5E5A]">วันที่เสนอเข้าพบ:</p>
                 ${slotsStr}
               </div>
             `;
@@ -1093,31 +1125,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const pfVal = document.getElementById('preferred_date_from')?.value;
             const ptVal = document.getElementById('preferred_date_to')?.value;
             if (pfVal || ptVal) {
-              rangeText = `<p class="mt-1 text-slate-400">ช่วงวันที่ต้องการ: <span class="text-slate-200">${pfVal || 'ไม่จำกัด'} ถึง ${ptVal || 'ไม่จำกัด'}</span></p>`;
+              rangeText = `<p class="mt-1 text-[#5F5E5A]">ช่วงวันที่ต้องการ: <span class="text-[#0F172A] font-medium">${pfVal || 'ไม่จำกัด'} ถึง ${ptVal || 'ไม่จำกัด'}</span></p>`;
             }
             timeDisplayHtml = `
-              <p>ระยะเวลาที่ต้องการ: <span class="font-bold text-slate-200">${optionHours}</span> (จำนวน ${slotCount} คิว)</p>
+              <p>ระยะเวลาที่ต้องการ: <span class="font-bold text-[#0F172A]">${optionHours}</span> (จำนวน ${slotCount} คิว)</p>
               ${rangeText}
-              <p class="text-[10px] text-amber-500 mt-1">รอเลขาฯ จัดสรรคิวและแจ้งผลทางอีเมล</p>
+              <p class="text-[10px] text-[#D97706] font-semibold mt-1">รอเลขาฯ จัดสรรคิวและแจ้งผลทางอีเมล</p>
             `;
           }
 
           let attendeesDisplayHtml = '';
           if (finalAttendees.length > 0) {
-            attendeesDisplayHtml = `<p><span class="text-slate-400 font-medium">ผู้เข้าร่วมเพิ่มเติม:</span> <span class="font-semibold text-slate-200">${finalAttendees.map(a => `${a.name} (${a.position})`).join(', ')}</span></p>`;
+            attendeesDisplayHtml = `<p><span class="text-[#5F5E5A] font-medium">ผู้เข้าร่วมเพิ่มเติม:</span> <span class="font-semibold text-[#0F172A]">${finalAttendees.map(a => `${a.name} (${a.position})`).join(', ')}</span></p>`;
           }
 
           successDetailsEl.innerHTML = `
-            <div class="space-y-1.5 leading-relaxed">
-              <p><span class="text-slate-400 font-medium">ชื่อผู้ติดต่อ:</span> <span class="font-semibold text-slate-200">${name} (${position})</span></p>
-              <p><span class="text-slate-400 font-medium">บริษัท:</span> <span class="font-semibold text-slate-200">${company}</span></p>
-              <p><span class="text-slate-400 font-medium">เบอร์โทรศัพท์:</span> <span class="font-semibold text-slate-200">${phone}</span></p>
-              <p><span class="text-slate-400 font-medium">วัตถุประสงค์หลัก:</span> <span class="font-semibold text-slate-200">${purposeMain}</span></p>
-              <p><span class="text-slate-400 font-medium">ผู้บริหารที่ขอพบ:</span> <span class="font-semibold text-[#F59E0B]">${selectedHostObj.name}</span></p>
-              <p><span class="text-slate-400 font-medium">หัวข้อการประชุม:</span> <span class="text-slate-300">${purposeTextarea}</span></p>
-              <p><span class="text-slate-400 font-medium">รูปแบบการประชุม:</span> <span class="font-semibold text-slate-200">${meetingFormat === 'online' ? 'ออนไลน์ (Zoom/Meet)' : `ออนไซต์ ที่ ${meetingLocation}`}</span></p>
+            <div class="space-y-1.5 leading-relaxed text-[#0F172A]">
+              <p><span class="text-[#5F5E5A] font-medium">ชื่อผู้ติดต่อ:</span> <span class="font-semibold text-[#0F172A]">${name} (${position})</span></p>
+              <p><span class="text-[#5F5E5A] font-medium">บริษัท:</span> <span class="font-semibold text-[#0F172A]">${company}</span></p>
+              <p><span class="text-[#5F5E5A] font-medium">เบอร์โทรศัพท์:</span> <span class="font-semibold text-[#0F172A]">${phone}</span></p>
+              <p><span class="text-[#5F5E5A] font-medium">วัตถุประสงค์หลัก:</span> <span class="font-semibold text-[#0F172A]">${purposeMain}</span></p>
+              <p><span class="text-[#5F5E5A] font-medium">ผู้บริหารที่ขอพบ:</span> <span class="font-semibold text-[#D97706]">${selectedHostObj.name}</span></p>
+              <p><span class="text-[#5F5E5A] font-medium">หัวข้อการประชุม:</span> <span class="text-[#0F172A]">${purposeTextarea}</span></p>
+              <p><span class="text-[#5F5E5A] font-medium">รูปแบบการประชุม:</span> <span class="font-semibold text-[#0F172A]">${meetingFormat === 'online' ? 'ออนไลน์ (Zoom/Meet)' : `ออนไซต์ ที่ ${meetingLocation}`}</span></p>
               ${attendeesDisplayHtml}
-              <div class="mt-2.5 pt-2.5 border-t border-slate-800 text-xs text-slate-400">
+              <div class="mt-2.5 pt-2.5 border-t border-[#E8E2D4] text-xs text-[#5F5E5A]">
                 ${timeDisplayHtml}
               </div>
             </div>
